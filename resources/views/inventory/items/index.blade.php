@@ -6,17 +6,25 @@
 <style>
   /* Official Ministry Print Stylesheet */
   @media print {
+    @page {
+      size: A4 landscape;
+      margin: 1cm 1.2cm;
+    }
     body {
       background-color: #ffffff !important;
-      font-size: 11pt !important;
+      font-size: 9.5pt !important;
       color: #000000 !important;
+      font-family: Arial, "Helvetica Neue", Helvetica, sans-serif !important;
     }
     #sidebar-slot,
     #navbar-slot,
     #footer-slot,
+    #app-preloader,
     .no-print,
     button,
-    form[action*="items"] {
+    form,
+    nav,
+    .toast-container {
       display: none !important;
     }
     .print-only {
@@ -26,19 +34,22 @@
       border: 1px solid #000000 !important;
       box-shadow: none !important;
       border-radius: 0 !important;
+      overflow: visible !important;
     }
     table {
       width: 100% !important;
       border-collapse: collapse !important;
     }
     th, td {
-      border: 1px solid #999999 !important;
-      padding: 6px 8px !important;
-      font-size: 9pt !important;
+      border: 1px solid #333333 !important;
+      padding: 5px 6px !important;
+      font-size: 8pt !important;
+      color: #000000 !important;
     }
-    th {
+    thead th {
       background-color: #f1f5f9 !important;
       color: #000000 !important;
+      font-weight: bold !important;
     }
     .main-content {
       padding: 0 !important;
@@ -58,90 +69,111 @@
 @section('content')
 <main class="main-content flex-1 max-w-[1720px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
-  <!-- Printable Ministry Letterhead (Only visible during print) -->
-  <div class="print-only mb-6 text-center border-b-2 border-slate-900 pb-4">
-    <div class="flex items-center justify-center gap-4 mb-2">
-      <img src="{{ asset('assets/logo-kemenhub.png') }}" alt="Logo Kemenhub" class="h-16 w-auto object-contain" />
-      <div>
-        <h2 class="text-base font-extrabold uppercase tracking-wide text-slate-900 leading-tight">
-          Kementerian Perhubungan Republik Indonesia
-        </h2>
-        <h3 class="text-sm font-bold uppercase tracking-wider text-slate-800 leading-tight">
-          Direktorat Jenderal Perhubungan Darat
+  <!-- ============================================================== -->
+  <!-- KOP SURAT DINAS RESMI (Hanya Tampil Saat Dicetak / Print)       -->
+  <!-- ============================================================== -->
+  <div class="print-only mb-6">
+    <!-- Header Kop Kementerian -->
+    <div class="flex items-center justify-between pb-3 border-b-[3px] border-double border-black">
+      <div class="w-20 h-20 shrink-0 flex items-center justify-center">
+        <img src="{{ asset('assets/logo-kemenhub.png') }}" alt="Logo Kemenhub" class="w-full h-full object-contain" />
+      </div>
+      <div class="flex-1 text-center px-4">
+        <h3 class="text-xs font-bold uppercase tracking-wider text-black">
+          KEMENTERIAN PERHUBUNGAN REPUBLIK INDONESIA
         </h3>
-        <h1 class="text-lg font-black uppercase tracking-tight text-slate-900 leading-snug">
-          Balai Pengelola Transportasi Darat Kelas II Jawa Timur
+        <h2 class="text-sm font-extrabold uppercase tracking-wide text-black">
+          DIREKTORAT JENDERAL PERHUBUNGAN DARAT
+        </h2>
+        <h1 class="text-base font-black uppercase tracking-tight text-black">
+          BALAI PENGELOLA TRANSPORTASI DARAT KELAS II JAWA TIMUR
         </h1>
-        <p class="text-[10px] text-slate-600 mt-0.5 font-medium">
-          Jl. Gayung Kebonsari No. 50, Gayungan, Kota Surabaya, Jawa Timur 60235
+        <p class="text-[10px] text-black mt-1 leading-tight font-medium">
+          Jl. Gayung Kebonsari No. 50, Gayungan, Kota Surabaya, Jawa Timur 60235<br>
+          Telepon: (031) 8291244 | Surel: bptdjatim@dephub.go.id | Laman: hubdat.dephub.go.id
         </p>
       </div>
+      <div class="w-20 h-20 shrink-0"></div>
     </div>
-    <div class="w-full border-t border-slate-400 mt-2 pt-2">
-      <h4 class="text-sm font-bold uppercase tracking-wider text-slate-900">
-        Laporan Rekapitulasi Katalog dan Master Data Inventaris ATK
+
+    <!-- Judul Dokumen Laporan Rekapitulasi -->
+    <div class="text-center my-4 space-y-1">
+      <h4 class="text-sm font-black uppercase tracking-wider text-black underline underline-offset-4">
+        BUKU INDUK REKAPITULASI INVENTARIS ALAT TULIS KANTOR (ATK)
       </h4>
-      <p class="text-[11px] text-slate-600">
-        Dicetak pada: {{ now()->translatedFormat('d F Y, H:i') }} WIB | Operator: {{ Auth::user()?->name ?? 'Petugas ATK' }}
+      <p class="text-[10px] text-black font-medium">
+        Nomor Registrasi: BPTD-JATIM/LOG-ATK/{{ date('Y') }} &bull; Tanggal Cetak: {{ now()->translatedFormat('d F Y, H:i') }} WIB &bull; Operator: {{ Auth::user()?->name ?? 'Petugas Logistik' }}
       </p>
     </div>
   </div>
 
-  <!-- Header Banner: Institutional Ministry Tone -->
+  <!-- ============================================================== -->
+  <!-- HEADER BANNER: TATA KELOLA KEMENTERIAN & BUTTONS HORIZONTAL     -->
+  <!-- ============================================================== -->
   <div class="no-print bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 sm:p-6 transition hover:shadow-md">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
-      <!-- Title & Agency Info -->
-      <div class="space-y-2">
-        <div class="flex flex-wrap items-center gap-2 text-xs font-semibold">
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-[11px] tracking-wide font-medium">
+      
+      <!-- Sisi Kiri: Hierarki Dinas & Judul Halaman -->
+      <div class="space-y-2.5">
+        <!-- Tag Instansi Resmi (Rapi, Sejajar, Tidak Berantakan) -->
+        <div class="flex flex-wrap items-center gap-2 text-xs">
+          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 text-[11px] font-bold tracking-wide border border-slate-200">
             <svg class="w-3.5 h-3.5 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
               <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"/>
             </svg>
-            KEMENTERIAN PERHUBUNGAN REPUBLIK INDONESIA
+            KEMENTERIAN PERHUBUNGAN RI
           </span>
-          <span class="text-slate-300">/</span>
-          <span class="text-slate-500 font-medium">BPTD KELAS II JAWA TIMUR</span>
-          <span class="text-slate-300">/</span>
-          <span class="text-blue-700 font-bold">SUBBAGIAN TATA USAHA &amp; LOGISTIK</span>
+          <span class="text-slate-300 font-bold">&bull;</span>
+          <span class="text-slate-600 font-semibold text-[11px] uppercase tracking-wider">
+            BPTD Kelas II Jawa Timur
+          </span>
+          <span class="text-slate-300 font-bold">&bull;</span>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-700 font-bold text-[10px] uppercase tracking-wider border border-blue-200/70">
+            Subbagian Tata Usaha &amp; Logistik
+          </span>
         </div>
 
-        <div class="flex items-center gap-3">
-          <div class="w-11 h-11 rounded-xl bg-[#0b2341] text-amber-400 flex items-center justify-center shrink-0 shadow-xs">
-            <svg class="w-6 h-6 stroke-[1.8]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-            </svg>
+        <!-- Judul & Emblem Logo Dinas -->
+        <div class="flex items-center gap-3.5 pt-0.5">
+          <div class="w-12 h-12 rounded-2xl bg-[#0b2341] text-amber-400 p-2.5 flex items-center justify-center shrink-0 shadow-xs border border-slate-700">
+            <img src="{{ asset('assets/logo-kemenhub.png') }}" alt="Logo Kemenhub" class="w-full h-full object-contain filter brightness-105" />
           </div>
           <div>
-            <h2 class="text-xl sm:text-2xl font-black tracking-tight text-slate-900 leading-tight uppercase">
-              Katalog dan Master Data ATK
-            </h2>
-            <p class="text-xs sm:text-[13px] text-slate-500 mt-0.5">
+            <div class="flex items-center gap-2">
+              <h2 class="text-xl sm:text-2xl font-black tracking-tight text-slate-900 leading-tight uppercase">
+                Katalog dan Master Data ATK
+              </h2>
+              <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+                BPH / ATK
+              </span>
+            </div>
+            <p class="text-xs sm:text-[13px] text-slate-500 font-medium mt-0.5">
               Penatausahaan Buku Induk Barang Persediaan Habis Pakai, Pengawasan Safety Stock, dan Standar Distribusi Internal.
             </p>
           </div>
         </div>
       </div>
 
-      <!-- Action Buttons: Institutional Palette -->
-      <div class="flex flex-wrap items-center gap-2.5">
-        <!-- Print / Export Button -->
+      <!-- Sisi Kanan: Action Buttons (Sejajar Horizontal & Presisi) -->
+      <div class="flex items-center gap-3 shrink-0 self-start lg:self-center">
+        <!-- Tombol Cetak Dokumen / Berita Acara -->
         <button
           type="button"
           onclick="window.print()"
-          class="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-xl bg-white hover:bg-slate-50 text-slate-700 font-semibold text-xs border border-slate-300 shadow-xs transition hover:border-slate-400 active:scale-95"
-          title="Cetak format Berita Acara & Rekapitulasi ATK"
+          class="inline-flex items-center justify-center gap-2 h-11 px-4 rounded-xl bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-700 hover:text-slate-900 font-semibold text-xs sm:text-sm border border-slate-300 hover:border-slate-400 shadow-xs transition-all active:scale-[0.98] cursor-pointer"
+          title="Cetak Berita Acara &amp; Rekapitulasi Inventaris ATK"
         >
-          <svg class="w-4 h-4 text-slate-600 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 text-slate-600 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
           </svg>
           <span>Cetak Rekap</span>
         </button>
 
-        <!-- Registrasi Barang ATK Button -->
+        <!-- Tombol Registrasi Barang ATK (Primary Dinas Kemenhub) -->
         <button
           type="button"
           onclick="openModal('modal-add-item')"
-          class="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-[#0b2341] hover:bg-[#13335e] text-white font-semibold text-xs sm:text-sm border border-amber-400/30 shadow-md shadow-slate-900/10 transition-all hover:scale-[1.02] active:scale-[0.98]"
+          class="inline-flex items-center justify-center gap-2 h-11 px-4.5 rounded-xl bg-[#0b2341] hover:bg-[#13335e] active:scale-[0.98] text-white font-semibold text-xs sm:text-sm border border-amber-400/30 shadow-sm shadow-[#0b2341]/20 transition-all hover:brightness-105 cursor-pointer"
         >
           <svg class="w-4 h-4 text-amber-400 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path>
@@ -149,6 +181,7 @@
           <span>Registrasi Barang ATK</span>
         </button>
       </div>
+
     </div>
   </div>
 
@@ -622,6 +655,36 @@
         {{ $items->links() }}
       </div>
     @endif
+  </div>
+
+  <!-- ============================================================== -->
+  <!-- LEMBAR PENGESAHAN CETAK (Hanya Tampil Saat Dicetak / Print)    -->
+  <!-- ============================================================== -->
+  <div class="print-only mt-8 pt-4 break-inside-avoid">
+    <div class="grid grid-cols-2 text-center text-xs text-black">
+      <div class="space-y-16">
+        <p class="font-semibold text-black leading-relaxed">
+          Mengetahui,<br>
+          <strong>Kepala Subbagian Tata Usaha</strong><br>
+          BPTD Kelas II Jawa Timur
+        </p>
+        <div>
+          <p class="font-bold underline text-black">( ............................................................ )</p>
+          <p class="text-black text-[10px] mt-0.5">NIP. .......................................................</p>
+        </div>
+      </div>
+      <div class="space-y-16">
+        <p class="font-semibold text-black leading-relaxed">
+          Surabaya, {{ now()->translatedFormat('d F Y') }}<br>
+          <strong>Pengelola Inventaris ATK &amp; Logistik</strong><br>
+          BPTD Kelas II Jawa Timur
+        </p>
+        <div>
+          <p class="font-bold underline text-black">( {{ Auth::user()?->name ?? 'Petugas Logistik' }} )</p>
+          <p class="text-black text-[10px] mt-0.5">NIP. {{ Auth::user()?->nip ?? '.......................................................' }}</p>
+        </div>
+      </div>
+    </div>
   </div>
 
 </main>
