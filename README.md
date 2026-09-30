@@ -1,4 +1,4 @@
-# BPTD Kelas II Jawa Timur - Internal Management System & Inventory ATK
+# BPTD Kelas II Jawa Timur - Internal Management System 
 
 Aplikasi Internal Terintegrasi Balai Pengelola Transportasi Darat (BPTD) Kelas II Jawa Timur - Kementerian Perhubungan Republik Indonesia.
 
