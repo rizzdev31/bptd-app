@@ -1,0 +1,851 @@
+@extends('layouts.app')
+
+@section('title', 'Dashboard Utama - BPTD Kelas II Jawa Timur')
+
+@section('content')
+<!-- BEGIN: DashboardContextContent (Main Board Cloning) -->
+<main
+  class="flex-1 max-w-430 w-full mx-auto px-4 sm:px-6 lg:px-8 py-7 space-y-7"
+>
+  <!-- Header Main Board -->
+  <div class="space-y-0.5">
+    <p class="text-sm font-semibold text-slate-800">
+      Selamat Datang
+      <span class="text-blue-600 font-bold">{{ Auth::user()?->name ?? 'Pegawai' }}</span>
+      <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full ml-1 font-semibold">{{ Auth::user()?->role?->label ?? 'Staf' }}</span>
+    </p>
+    <h2
+      class="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900"
+    >
+      Dashboard Utama Aplikasi
+    </h2>
+  </div>
+
+  @if (($lowStockCount ?? 0) > 0 || ($outOfStockCount ?? 0) > 0)
+    <div class="p-4 rounded-2xl bg-amber-50 border border-amber-200 text-amber-900 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-xs">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-600 flex items-center justify-center shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+          </svg>
+        </div>
+        <div>
+          <h4 class="font-bold text-sm">Peringatan Ketersediaan Persediaan ATK</h4>
+          <p class="text-xs text-amber-700 mt-0.5">
+            Terdapat <span class="font-bold underline">{{ $lowStockCount ?? 0 }} item menipis</span> dan <span class="font-bold underline">{{ $outOfStockCount ?? 0 }} item habis</span> yang membutuhkan perhatian atau pengadaan baru.
+          </p>
+        </div>
+      </div>
+      <a
+        href="{{ route('inventory.items.index', ['stock_status' => 'low_stock']) }}"
+        class="inline-flex items-center justify-center px-4 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs transition shrink-0 shadow-xs"
+      >
+        Lihat Stok Kritis &rarr;
+      </a>
+    </div>
+  @endif
+
+  <!-- 1. Row of 3 Metric Cards with circular gauges -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <!-- Card 1: Pegawai Aktif -->
+    <div
+      class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition"
+    >
+      <div class="flex items-center gap-4">
+        <!-- Gauge Circle -->
+        <div
+          class="relative w-20 h-20 shrink-0 flex items-center justify-center"
+        >
+          <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+            <circle
+              cx="18"
+              cy="18"
+              fill="none"
+              r="14.5"
+              stroke="#e0e7ff"
+              stroke-width="3"
+            ></circle>
+            <circle
+              cx="18"
+              cy="18"
+              fill="none"
+              r="14.5"
+              stroke="#2563eb"
+              stroke-dasharray="91"
+              stroke-dashoffset="20"
+              stroke-linecap="round"
+              stroke-width="3.2"
+            ></circle>
+          </svg>
+          <span class="absolute text-xs font-bold text-slate-900">{{ $activeEmployees ?? 0 }}</span>
+        </div>
+        <!-- Details -->
+        <div class="flex-1">
+          <div class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-blue-600 fill-current" viewBox="0 0 24 24">
+              <path
+                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"
+              ></path>
+            </svg>
+            <h3 class="font-bold text-slate-900 text-sm">Pegawai Aktif</h3>
+          </div>
+          <p class="text-xs text-slate-400 mt-1 leading-snug">
+            {{ $activeEmployees ?? 0 }} Pegawai Terdaftar di Sistem
+          </p>
+        </div>
+      </div>
+      <div class="mt-4">
+        <a
+          href="{{ route('pegawai.index') }}"
+          class="block w-full py-2 px-4 rounded-xl bg-blue-100 hover:bg-blue-200 text-blue-700 font-semibold text-xs tracking-wide transition text-center"
+        >
+          Monitoring Pegawai
+        </a>
+      </div>
+    </div>
+    <!-- Card 2: Report Inventory -->
+    <div
+      class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition"
+    >
+      <div class="flex items-center gap-4">
+        <!-- Gauge Circle with Red & Blue accents -->
+        <div
+          class="relative w-20 h-20 shrink-0 flex items-center justify-center"
+        >
+          <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+            <circle
+              cx="18"
+              cy="18"
+              fill="none"
+              r="14.5"
+              stroke="#f1f5f9"
+              stroke-width="3"
+            ></circle>
+            <!-- Blue arc -->
+            <circle
+              cx="18"
+              cy="18"
+              fill="none"
+              r="14.5"
+              stroke="#2563eb"
+              stroke-dasharray="91"
+              stroke-dashoffset="40"
+              stroke-linecap="round"
+              stroke-width="3.2"
+            ></circle>
+          </svg>
+          <span class="absolute text-xs font-bold text-slate-900">{{ $totalItems ?? 0 }}</span>
+        </div>
+        <!-- Details -->
+        <div class="flex-1">
+          <h3 class="font-bold text-slate-900 text-sm">Katalog ATK</h3>
+          <p class="text-xs text-slate-400 mt-1 leading-snug">
+            {{ $totalItems ?? 0 }} Jenis Item Terdaftar
+          </p>
+        </div>
+      </div>
+      <div class="mt-4">
+        <a
+          href="{{ route('inventory.items.index') }}"
+          class="block w-full py-2 px-4 rounded-xl bg-blue-100 hover:bg-blue-200 text-blue-700 font-semibold text-xs tracking-wide transition text-center"
+        >
+          Monitoring Inventory ATK
+        </a>
+      </div>
+    </div>
+    <!-- Card 3: Stock Barang -->
+    <div
+      class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex flex-col justify-between hover:shadow-md transition"
+    >
+      <div class="flex items-center gap-4">
+        <!-- Gauge Circle with Box Icon inside -->
+        <div
+          class="relative w-20 h-20 shrink-0 flex items-center justify-center"
+        >
+          <svg class="w-full h-full -rotate-90" viewBox="0 0 36 36">
+            <circle
+              cx="18"
+              cy="18"
+              fill="none"
+              r="14.5"
+              stroke="#f1f5f9"
+              stroke-width="3"
+            ></circle>
+            <circle
+              cx="18"
+              cy="18"
+              fill="none"
+              r="14.5"
+              stroke="#2563eb"
+              stroke-dasharray="91"
+              stroke-dashoffset="30"
+              stroke-linecap="round"
+              stroke-width="3.2"
+            ></circle>
+          </svg>
+          <div
+            class="absolute w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600"
+          >
+            <svg
+              class="w-4 h-4 stroke-[1.8]"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              ></path>
+            </svg>
+          </div>
+        </div>
+        <!-- Details -->
+        <div class="flex-1">
+          <h3 class="font-bold text-slate-900 text-sm">Stock Barang</h3>
+          <p class="text-xs text-slate-400 mt-1 leading-snug">
+            {{ number_format($totalStock ?? 0) }} Unit Total Fisik
+          </p>
+        </div>
+      </div>
+      <div class="mt-4">
+        <a
+          href="{{ route('inventory.items.index') }}"
+          class="block w-full py-2 px-4 rounded-xl bg-blue-100 hover:bg-blue-200 text-blue-700 font-semibold text-xs tracking-wide transition text-center"
+        >
+          Cek Stock Barang Sekarang
+        </a>
+      </div>
+    </div>
+  </div>
+  <!-- 2. Mid Section: Analytics & Visual Charts Grid (3 Columns) -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+    <!-- Left Column: Rekapitulasi Inventory Bulanan (5 cols) -->
+    <div
+      class="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between"
+    >
+      <div>
+        <h3 class="text-base font-bold text-slate-900">
+          Rekapitulasi
+          <span class="font-normal text-slate-600">Inventory Bulanan</span>
+        </h3>
+      </div>
+      <!-- Vertical Bar Chart -->
+      <div class="mt-6 flex items-end justify-between gap-2.5 pt-4 h-56">
+        <!-- Jan 90% -->
+        <div class="flex flex-col items-center flex-1 h-full justify-end">
+          <div
+            class="w-full max-w-8.5 bg-slate-100 rounded-lg flex flex-col justify-end h-40 overflow-hidden"
+          >
+            <div
+              class="w-full bg-[#2b43ff] rounded-lg"
+              style="height: 90%"
+            ></div>
+          </div>
+          <span class="text-[10px] font-bold text-slate-700 mt-2">90%</span>
+          <span class="text-xs font-semibold text-slate-800 mt-0.5">Jan</span>
+        </div>
+        <!-- Feb 80% -->
+        <div class="flex flex-col items-center flex-1 h-full justify-end">
+          <div
+            class="w-full max-w-8.5 bg-slate-100 rounded-lg flex flex-col justify-end h-40 overflow-hidden"
+          >
+            <div
+              class="w-full bg-[#2b43ff] rounded-lg"
+              style="height: 40%"
+            ></div>
+          </div>
+          <span class="text-[10px] font-bold text-slate-700 mt-2">80%</span>
+          <span class="text-xs font-semibold text-slate-800 mt-0.5">Feb</span>
+        </div>
+        <!-- Mar 60% -->
+        <div class="flex flex-col items-center flex-1 h-full justify-end">
+          <div
+            class="w-full max-w-8.5 bg-slate-100 rounded-lg flex flex-col justify-end h-40 overflow-hidden"
+          >
+            <div
+              class="w-full bg-[#2b43ff] rounded-lg"
+              style="height: 85%"
+            ></div>
+          </div>
+          <span class="text-[10px] font-bold text-slate-700 mt-2">60%</span>
+          <span class="text-xs font-semibold text-slate-800 mt-0.5">Mar</span>
+        </div>
+        <!-- Apr 10% -->
+        <div class="flex flex-col items-center flex-1 h-full justify-end">
+          <div
+            class="w-full max-w-8.5 bg-slate-100 rounded-lg flex flex-col justify-end h-40 overflow-hidden"
+          >
+            <div
+              class="w-full bg-[#2b43ff] rounded-lg"
+              style="height: 55%"
+            ></div>
+          </div>
+          <span class="text-[10px] font-bold text-slate-700 mt-2">10%</span>
+          <span class="text-xs font-semibold text-slate-800 mt-0.5">Apr</span>
+        </div>
+        <!-- May 90% -->
+        <div class="flex flex-col items-center flex-1 h-full justify-end">
+          <div
+            class="w-full max-w-8.5 bg-slate-100 rounded-lg flex flex-col justify-end h-40 overflow-hidden"
+          >
+            <div
+              class="w-full bg-[#2b43ff] rounded-lg"
+              style="height: 45%"
+            ></div>
+          </div>
+          <span class="text-[10px] font-bold text-slate-700 mt-2">90%</span>
+          <span class="text-xs font-semibold text-slate-800 mt-0.5">May</span>
+        </div>
+        <!-- Jun 80% -->
+        <div class="flex flex-col items-center flex-1 h-full justify-end">
+          <div
+            class="w-full max-w-8.5 bg-slate-100 rounded-lg flex flex-col justify-end h-40 overflow-hidden"
+          >
+            <div
+              class="w-full bg-[#2b43ff] rounded-lg"
+              style="height: 50%"
+            ></div>
+          </div>
+          <span class="text-[10px] font-bold text-slate-700 mt-2">80%</span>
+          <span class="text-xs font-semibold text-slate-800 mt-0.5">Jun</span>
+        </div>
+        <!-- Jul 90% -->
+        <div class="flex flex-col items-center flex-1 h-full justify-end">
+          <div
+            class="w-full max-w-8.5 bg-slate-100 rounded-lg flex flex-col justify-end h-40 overflow-hidden"
+          >
+            <div
+              class="w-full bg-[#2b43ff] rounded-lg"
+              style="height: 42%"
+            ></div>
+          </div>
+          <span class="text-[10px] font-bold text-slate-700 mt-2">90%</span>
+          <span class="text-xs font-semibold text-slate-800 mt-0.5">Jul</span>
+        </div>
+      </div>
+    </div>
+    <!-- Center Column: Traffic Inventory (4 cols) -->
+    <div
+      class="lg:col-span-4 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between"
+    >
+      <div>
+        <h3 class="text-base font-bold text-slate-900">Traffic Inventory</h3>
+      </div>
+      <div class="my-auto space-y-6 pt-4 pb-2">
+        <!-- Metric 1: User Peminjaman (1,235 UP) -->
+        <div class="flex items-center justify-between gap-4">
+          <!-- Mint Wave Chart SVG -->
+          <div class="w-28 sm:w-32 h-12 flex items-center">
+            <svg class="w-full h-full" fill="none" viewBox="0 0 120 40">
+              <path
+                d="M0 25 C 10 15, 20 30, 30 20 C 40 10, 50 35, 65 18 C 80 5, 95 25, 105 10"
+                stroke="#10b981"
+                stroke-linecap="round"
+                stroke-width="2.2"
+              ></path>
+              <circle
+                cx="105"
+                cy="10"
+                fill="#fff"
+                r="3.5"
+                stroke="#10b981"
+                stroke-width="2.5"
+              ></circle>
+            </svg>
+          </div>
+          <!-- Numbers -->
+          <div class="text-right">
+            <div
+              class="flex items-center justify-end gap-1 text-2xl font-extrabold text-slate-900"
+            >
+              <span class="">1,235</span>
+              <span class="text-emerald-500 text-xl font-bold">↑</span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">
+              User Peminjaman
+            </p>
+          </div>
+        </div>
+        <!-- Metric 2: Barang Berkurang (456 DOWN) -->
+        <div
+          class="flex items-center justify-between gap-4 border-t border-slate-100 pt-5"
+        >
+          <!-- Coral Wave Chart SVG -->
+          <div class="w-28 sm:w-32 h-12 flex items-center">
+            <svg class="w-full h-full" fill="none" viewBox="0 0 120 40">
+              <path
+                d="M5 25 C 15 20, 25 35, 45 28 C 65 20, 75 35, 95 18 C 100 15, 105 15, 110 14"
+                stroke="#f87171"
+                stroke-linecap="round"
+                stroke-width="2.2"
+              ></path>
+              <circle
+                cx="110"
+                cy="14"
+                fill="#fff"
+                r="3.5"
+                stroke="#f87171"
+                stroke-width="2.5"
+              ></circle>
+            </svg>
+          </div>
+          <!-- Numbers -->
+          <div class="text-right">
+            <div
+              class="flex items-center justify-end gap-1 text-2xl font-extrabold text-slate-900"
+            >
+              <span class="">456</span>
+              <span class="text-red-400 text-xl font-bold">↓</span>
+            </div>
+            <p class="text-xs text-slate-500 font-medium mt-0.5">
+              Barang Berkurang
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Right Column: Royal Blue Solid Accent Card (3 cols) -->
+    <div
+      class="lg:col-span-3 rounded-3xl bg-[#264bf6] min-h-55 shadow-sm flex items-center justify-center p-6 text-white relative overflow-hidden"
+    >
+      <!-- Subtle glow and rounded geometry -->
+      <div
+        class="absolute -right-10 -bottom-10 w-44 h-44 rounded-full bg-white/10 blur-xl pointer-events-none"
+      ></div>
+      <div
+        class="absolute -left-10 -top-10 w-40 h-40 rounded-full bg-blue-400/20 blur-lg pointer-events-none"
+      ></div>
+    </div>
+  </div>
+  <!-- 3. Bottom Section: Data Real Time Inventory Apps Table -->
+  <div class="space-y-3 pt-2">
+    <h3 class="text-xl font-bold text-slate-900">
+      Data Real Time
+      <span class="font-normal text-slate-700">Inventory Apps</span>
+    </h3>
+    <div
+      class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden"
+    >
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs sm:text-sm text-slate-600">
+          <thead
+            class="bg-white text-slate-800 font-bold border-b border-slate-100 text-xs"
+          >
+            <tr>
+              <th class="py-4 px-5 w-12 text-center" scope="col">
+                <input
+                  class="rounded border-slate-300 text-blue-600 focus:ring-0 focus:ring-offset-0"
+                  type="checkbox"
+                />
+              </th>
+              <th class="py-4 px-4 font-bold" scope="col">ID</th>
+              <th class="py-4 px-4 font-bold" scope="col">NIP</th>
+              <th class="py-4 px-4 font-bold" scope="col">Nama Pegawai</th>
+              <th class="py-4 px-4 font-bold" scope="col">Jenis Pengajuan</th>
+              <th class="py-4 px-4 font-bold" scope="col">Nama Barang</th>
+              <th class="py-4 px-4 font-bold" scope="col">Status</th>
+              <th class="py-4 px-4 font-bold text-center" scope="col">Aksi</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100 font-normal">
+            <!-- Row 1: PGJ-001 Sukses -->
+            <tr class="hover:bg-slate-50/70 transition">
+              <td class="py-4 px-5 text-center">
+                <input
+                  class="rounded border-slate-300 text-blue-600 focus:ring-0 focus:ring-offset-0"
+                  type="checkbox"
+                />
+              </td>
+              <td class="py-4 px-4 font-medium text-slate-800">PGJ-001</td>
+              <td class="py-4 px-4 text-slate-600">0192648989</td>
+              <td class="py-4 px-4 text-slate-800 font-medium">
+                Muhammad Ulil
+              </td>
+              <td class="py-4 px-4">
+                <span
+                  class="inline-block px-3 py-1 rounded-md border border-blue-400 text-blue-600 text-[11px] font-semibold"
+                >
+                  Permintaan
+                </span>
+              </td>
+              <td class="py-4 px-4 text-slate-700">Bulpoin</td>
+              <td class="py-4 px-4 font-medium text-slate-800">Sukses</td>
+              <td class="py-4 px-4">
+                <div class="flex items-center justify-center gap-2.5">
+                  <!-- Checkmark Green -->
+                  <button
+                    class="text-emerald-500 hover:text-emerald-600 p-0.5"
+                    title="Setujui"
+                    type="button"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      ></circle>
+                      <path
+                        d="M8 12l2.5 2.5L16 9"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  </button>
+                  <!-- External Link Amber -->
+                  <button
+                    class="text-amber-500 hover:text-amber-600 p-0.5"
+                    title="Detail"
+                    type="button"
+                  >
+                    <svg
+                      class="w-4 h-4 stroke-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  </button>
+                  <!-- Lock Black -->
+                  <button
+                    class="text-slate-800 hover:text-black p-0.5"
+                    title="Kunci"
+                    type="button"
+                  >
+                    <svg
+                      class="w-4 h-4 stroke-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <rect height="10" rx="2" width="14" x="5" y="11"></rect>
+                      <path d="M8 11V7a4 4 0 018 0v4"></path>
+                    </svg>
+                  </button>
+                  <!-- Three Dots Vertical -->
+                  <button
+                    class="text-slate-500 hover:text-slate-800 p-0.5"
+                    title="Menu Lain"
+                    type="button"
+                  >
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path
+                        d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <!-- Row 2: PGJ-002 Sukses -->
+            <tr class="hover:bg-slate-50/70 transition">
+              <td class="py-4 px-5 text-center">
+                <input
+                  class="rounded border-slate-300 text-blue-600 focus:ring-0 focus:ring-offset-0"
+                  type="checkbox"
+                />
+              </td>
+              <td class="py-4 px-4 font-medium text-slate-800">PGJ-002</td>
+              <td class="py-4 px-4 text-slate-600">0192648989</td>
+              <td class="py-4 px-4 text-slate-800 font-medium">
+                Muhammad Ulil
+              </td>
+              <td class="py-4 px-4">
+                <span
+                  class="inline-block px-3 py-1 rounded-md border border-blue-400 text-blue-600 text-[11px] font-semibold"
+                >
+                  Permintaan
+                </span>
+              </td>
+              <td class="py-4 px-4 text-slate-700">Bulpoin</td>
+              <td class="py-4 px-4 font-medium text-slate-800">Sukses</td>
+              <td class="py-4 px-4">
+                <div class="flex items-center justify-center gap-2.5">
+                  <button
+                    class="text-emerald-500 hover:text-emerald-600 p-0.5"
+                    title="Setujui"
+                    type="button"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      ></circle>
+                      <path
+                        d="M8 12l2.5 2.5L16 9"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  </button>
+                  <button
+                    class="text-amber-500 hover:text-amber-600 p-0.5"
+                    title="Detail"
+                    type="button"
+                  >
+                    <svg
+                      class="w-4 h-4 stroke-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  </button>
+                  <button
+                    class="text-slate-800 hover:text-black p-0.5"
+                    title="Kunci"
+                    type="button"
+                  >
+                    <svg
+                      class="w-4 h-4 stroke-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <rect height="10" rx="2" width="14" x="5" y="11"></rect>
+                      <path d="M8 11V7a4 4 0 018 0v4"></path>
+                    </svg>
+                  </button>
+                  <button
+                    class="text-slate-500 hover:text-slate-800 p-0.5"
+                    title="Menu Lain"
+                    type="button"
+                  >
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path
+                        d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <!-- Row 3: PGJ-003 Di Tolak -->
+            <tr class="hover:bg-slate-50/70 transition">
+              <td class="py-4 px-5 text-center">
+                <input
+                  class="rounded border-slate-300 text-blue-600 focus:ring-0 focus:ring-offset-0"
+                  type="checkbox"
+                />
+              </td>
+              <td class="py-4 px-4 font-medium text-slate-800">PGJ-003</td>
+              <td class="py-4 px-4 text-slate-600">0192648989</td>
+              <td class="py-4 px-4 text-slate-800 font-medium">
+                Muhammad Ulil
+              </td>
+              <td class="py-4 px-4">
+                <span
+                  class="inline-block px-3 py-1 rounded-md border border-blue-400 text-blue-600 text-[11px] font-semibold"
+                >
+                  Permintaan
+                </span>
+              </td>
+              <td class="py-4 px-4 text-slate-700">Bulpoin</td>
+              <td class="py-4 px-4 font-medium text-slate-800">Di Tolak</td>
+              <td class="py-4 px-4">
+                <div class="flex items-center justify-center gap-2.5">
+                  <button
+                    class="text-emerald-500 hover:text-emerald-600 p-0.5"
+                    title="Setujui"
+                    type="button"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      ></circle>
+                      <path
+                        d="M8 12l2.5 2.5L16 9"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  </button>
+                  <button
+                    class="text-amber-500 hover:text-amber-600 p-0.5"
+                    title="Detail"
+                    type="button"
+                  >
+                    <svg
+                      class="w-4 h-4 stroke-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  </button>
+                  <button
+                    class="text-slate-800 hover:text-black p-0.5"
+                    title="Kunci"
+                    type="button"
+                  >
+                    <svg
+                      class="w-4 h-4 stroke-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <rect height="10" rx="2" width="14" x="5" y="11"></rect>
+                      <path d="M8 11V7a4 4 0 018 0v4"></path>
+                    </svg>
+                  </button>
+                  <button
+                    class="text-slate-500 hover:text-slate-800 p-0.5"
+                    title="Menu Lain"
+                    type="button"
+                  >
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path
+                        d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            <!-- Row 4: PHJ-004 Di Tolak -->
+            <tr class="hover:bg-slate-50/70 transition">
+              <td class="py-4 px-5 text-center">
+                <input
+                  class="rounded border-slate-300 text-blue-600 focus:ring-0 focus:ring-offset-0"
+                  type="checkbox"
+                />
+              </td>
+              <td class="py-4 px-4 font-medium text-slate-800">PHJ-004</td>
+              <td class="py-4 px-4 text-slate-600">0192648989</td>
+              <td class="py-4 px-4 text-slate-800 font-medium">
+                Muhammad Ulil
+              </td>
+              <td class="py-4 px-4">
+                <span
+                  class="inline-block px-3 py-1 rounded-md border border-blue-400 text-blue-600 text-[11px] font-semibold"
+                >
+                  Permintaan
+                </span>
+              </td>
+              <td class="py-4 px-4 text-slate-700">Bulpoin</td>
+              <td class="py-4 px-4 font-medium text-slate-800">Di Tolak</td>
+              <td class="py-4 px-4">
+                <div class="flex items-center justify-center gap-2.5">
+                  <button
+                    class="text-emerald-500 hover:text-emerald-600 p-0.5"
+                    title="Setujui"
+                    type="button"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.5"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        cx="12"
+                        cy="12"
+                        r="9"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      ></circle>
+                      <path
+                        d="M8 12l2.5 2.5L16 9"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  </button>
+                  <button
+                    class="text-amber-500 hover:text-amber-600 p-0.5"
+                    title="Detail"
+                    type="button"
+                  >
+                    <svg
+                      class="w-4 h-4 stroke-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                      ></path>
+                    </svg>
+                  </button>
+                  <button
+                    class="text-slate-800 hover:text-black p-0.5"
+                    title="Kunci"
+                    type="button"
+                  >
+                    <svg
+                      class="w-4 h-4 stroke-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <rect height="10" rx="2" width="14" x="5" y="11"></rect>
+                      <path d="M8 11V7a4 4 0 018 0v4"></path>
+                    </svg>
+                  </button>
+                  <button
+                    class="text-slate-500 hover:text-slate-800 p-0.5"
+                    title="Menu Lain"
+                    type="button"
+                  >
+                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path
+                        d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
+                      ></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</main>
+<!-- END: DashboardContextContent -->
+@endsection

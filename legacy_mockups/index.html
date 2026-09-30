@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>BPTD Kelas II Jawa Timur - Internal Management System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      tailwind = {
+        config: {
+          theme: {
+            extend: {
+              fontFamily: {
+                sans: ['"Plus Jakarta Sans"', "sans-serif"],
+                mono: ['"JetBrains Mono"', "monospace"],
+              },
+              colors: {
+                brand: {
+                  navy: "#0b2341",
+                  gold: "#eab308",
+                  blue: "#2563eb",
+                  electric: "#264bf6",
+                },
+              },
+            },
+          },
+        },
+      };
+    </script>
+    <script>
+      // Auth Guard: Arahkan ke login.html jika belum login agar alur aplikasi terhubung
+      if (!sessionStorage.getItem("bptd_auth")) {
+        window.location.replace("login.html");
+      }
+      // Preloader hanya tampil tepat setelah login; refresh biasa langsung ke dashboard
+      if (!sessionStorage.getItem("bptd_show_preloader")) {
+        document.documentElement.classList.add("skip-preloader");
+      }
+    </script>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style>
+      body {
+        background-color: #f8fafc;
+        font-family: "Plus Jakarta Sans", sans-serif;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+      }
+      /* Preloader Critical CSS */
+      #app-preloader {
+        position: fixed !important;
+        inset: 0 !important;
+        width: 100vw !important;
+        height: 100vh !important;
+        background-color: #ffffff !important;
+        z-index: 999999 !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+        justify-content: center !important;
+        opacity: 1;
+        transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1), transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+      }
+      #app-preloader.preloader-hidden {
+        opacity: 0 !important;
+        pointer-events: none !important;
+        transform: scale(1.04) !important;
+      }
+      .skip-preloader #app-preloader {
+        display: none !important;
+      }
+      .capsule-pill {
+        box-shadow:
+          0 2px 8px -2px rgba(0, 0, 0, 0.05),
+          0 1px 3px 0 rgba(0, 0, 0, 0.03);
+        border: 1.5px solid #e2e8f0;
+        transition: all 0.2s ease-in-out;
+      }
+      .capsule-pill:hover {
+        box-shadow: 0 4px 14px -3px rgba(0, 0, 0, 0.08);
+      }
+      .sidebar-menu-btn {
+        box-shadow:
+          0 2px 6px -1px rgba(0, 0, 0, 0.04),
+          0 1px 3px 0 rgba(0, 0, 0, 0.02);
+        border: 1px solid #e2e8f0;
+      }
+      .sidebar-menu-btn:hover {
+        box-shadow: 0 4px 10px -2px rgba(0, 0, 0, 0.07);
+      }
+      .inventory-submenu {
+        display: grid;
+        grid-template-rows: 1fr;
+        transition: grid-template-rows 0.3s ease-in-out;
+      }
+      .inventory-submenu.is-collapsed {
+        grid-template-rows: 0fr;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .inventory-submenu {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body
+    class="min-h-screen text-slate-800 flex flex-col lg:flex-row bg-[#f8fafc]"
+  >
+    <!-- BEGIN: Preloader Screen (3 - 5 Detik) -->
+    <div
+      id="app-preloader"
+      class="fixed inset-0 z-50 bg-white flex flex-col items-center justify-center transition-all duration-700 ease-in-out select-none"
+      role="status"
+      aria-live="polite"
+      aria-label="Memuat aplikasi BPTD Kelas II Jawa Timur"
+    >
+      <div class="flex flex-col items-center justify-center px-6 text-center max-w-md w-full">
+        <!-- Logo Kementerian Perhubungan -->
+        <div class="w-12 h-12 mb-2 flex items-center justify-center">
+          <img
+            alt="Logo Kementerian Perhubungan"
+            class="w-full h-full object-contain"
+            src="https://lh3.googleusercontent.com/aida-public/AB6AXuDE-SnprrrJjpWB1_O_UtUHY9NG48yWfArFZOAPgk6jNhjqMG34tCK_76nS9cGrGtLniO8-96Fn-qoyyD13p1WUIejIyBDgukEDGa46tttwyXitBN-_dkop7a-MU0WwHyR7WZFflfVvoAOhjpJGwpGxVA5GF9anlPIl2yKfMuF4-uPrQ3LgYUapeybjRgUc8y_iIzC6cF2F7HWwzwG1a2mlrOtJk4CCPhiLwOJ4sMoFBXdMYT6Iyf0RaAvX9y_ptJz_Iw"
+          />
+        </div>
+
+        <!-- Video Bis Ukuran Kecil untuk Preloader -->
+        <div class="relative w-44 sm:w-52 h-28 sm:h-32 flex items-center justify-center overflow-hidden my-1">
+          <video
+            id="preloader-bus-video"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="auto"
+            class="w-full h-full object-contain mix-blend-multiply pointer-events-none select-none"
+            style="filter: contrast(102%) brightness(102.5%);"
+          >
+            <source src="assets/bus.mp4" type="video/mp4" />
+          </video>
+        </div>
+
+        <!-- Tulisan Identitas di Tengah Sesuai Permintaan -->
+        <div class="mt-2 space-y-1">
+          <h2 class="text-xl sm:text-2xl font-black text-slate-900 tracking-tight uppercase">
+            BPTD Kelas II Jawa Timur
+          </h2>
+          <p class="text-xs sm:text-[13px] font-semibold text-slate-500 uppercase tracking-wider">
+            Kementerian Perhubungan
+          </p>
+          <p class="text-[11px] font-medium text-blue-600 tracking-widest uppercase">
+            Internal Management System
+          </p>
+        </div>
+
+        <!-- Indikator Loading & Progress Bar -->
+        <div class="w-60 sm:w-64 mt-6">
+          <div class="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden shadow-inner relative">
+            <div
+              id="preloader-progress-bar"
+              class="h-full bg-gradient-to-r from-blue-500 to-blue-600 rounded-full w-0 transition-all ease-out"
+            ></div>
+          </div>
+          <div class="flex justify-between items-center mt-2.5 text-[11px] text-slate-400 font-mono">
+            <span id="preloader-status-text">Memuat sistem...</span>
+            <span id="preloader-percentage-text">0%</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- END: Preloader Screen -->
+
+    <div id="sidebar-slot" class="w-full lg:w-72 shrink-0"></div>
+    <div class="flex-1 flex flex-col min-w-0 min-h-screen justify-between">
+      <div id="navbar-slot"></div>
+      <div id="dashboard-slot" class="flex-1"></div>
+      <div id="footer-slot"></div>
+    </div>
+    <p id="app-status" class="sr-only" role="alert" aria-live="polite"></p>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
