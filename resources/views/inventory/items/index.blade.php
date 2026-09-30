@@ -113,44 +113,48 @@
   <div class="no-print bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 sm:p-6 transition hover:shadow-md">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
       
-      <!-- Sisi Kiri: Hierarki Dinas & Judul Halaman -->
-      <div class="space-y-2.5">
-        <!-- Tag Instansi Resmi (Rapi, Sejajar, Tidak Berantakan) -->
-        <div class="flex flex-wrap items-center gap-2 text-xs">
-          <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-slate-100 text-slate-800 text-[11px] font-bold tracking-wide border border-slate-200">
-            <svg class="w-3.5 h-3.5 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
-              <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"/>
-            </svg>
-            KEMENTERIAN PERHUBUNGAN RI
-          </span>
-          <span class="text-slate-300 font-bold">&bull;</span>
-          <span class="text-slate-600 font-semibold text-[11px] uppercase tracking-wider">
-            BPTD Kelas II Jawa Timur
-          </span>
-          <span class="text-slate-300 font-bold">&bull;</span>
-          <span class="inline-flex items-center px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-700 font-bold text-[10px] uppercase tracking-wider border border-blue-200/70">
-            Subbagian Tata Usaha &amp; Logistik
-          </span>
+      <!-- Sisi Kiri: Emblem Logo, Hierarki Dinas & Judul Halaman -->
+      <div class="flex items-center gap-4">
+        <!-- Official Emblem Badge (Presisi, Pas & Proporsional) -->
+        <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-linear-to-b from-[#0f2e54] to-[#0b2341] p-1.5 flex items-center justify-center shrink-0 shadow-sm border border-blue-900/60 ring-2 ring-slate-100">
+          <div class="w-full h-full rounded-xl bg-white flex items-center justify-center p-1.5 shadow-2xs">
+            <img src="{{ asset('assets/logo-kemenhub.png') }}" alt="Logo Kemenhub" class="w-full h-full object-contain" />
+          </div>
         </div>
 
-        <!-- Judul & Emblem Logo Dinas -->
-        <div class="flex items-center gap-3.5 pt-0.5">
-          <div class="w-12 h-12 rounded-2xl bg-[#0b2341] text-amber-400 p-2.5 flex items-center justify-center shrink-0 shadow-xs border border-slate-700">
-            <img src="{{ asset('assets/logo-kemenhub.png') }}" alt="Logo Kemenhub" class="w-full h-full object-contain filter brightness-105" />
+        <div class="space-y-1">
+          <!-- Tag Instansi Resmi (Ringkas & Sejajar) -->
+          <div class="flex flex-wrap items-center gap-2 text-xs">
+            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-800 text-[10.5px] font-bold tracking-wide border border-slate-200">
+              <svg class="w-3 h-3 text-blue-700" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd"/>
+              </svg>
+              KEMENTERIAN PERHUBUNGAN RI
+            </span>
+            <span class="text-slate-300 font-bold">&bull;</span>
+            <span class="text-slate-600 font-semibold text-[11px] uppercase tracking-wider">
+              BPTD KELAS II JATIM
+            </span>
+            <span class="text-slate-300 font-bold">&bull;</span>
+            <span class="inline-flex items-center px-2 py-0.5 rounded-md bg-blue-50 text-blue-700 font-bold text-[10px] uppercase tracking-wider border border-blue-200/70">
+              Subbag Tata Usaha
+            </span>
           </div>
-          <div>
-            <div class="flex items-center gap-2">
-              <h2 class="text-xl sm:text-2xl font-black tracking-tight text-slate-900 leading-tight uppercase">
-                Katalog dan Master Data ATK
-              </h2>
-              <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
-                BPH / ATK
-              </span>
-            </div>
-            <p class="text-xs sm:text-[13px] text-slate-500 font-medium mt-0.5">
-              Penatausahaan Buku Induk Barang Persediaan Habis Pakai, Pengawasan Safety Stock, dan Standar Distribusi Internal.
-            </p>
+
+          <!-- Judul Halaman & Badge BPH/ATK -->
+          <div class="flex items-center gap-2.5 pt-0.5">
+            <h2 class="text-xl sm:text-2xl font-black tracking-tight text-slate-900 leading-tight uppercase">
+              Katalog &amp; Master Data ATK
+            </h2>
+            <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-slate-100 text-slate-600 border border-slate-200">
+              BPH / ATK
+            </span>
           </div>
+
+          <!-- Deskripsi Singkat & Padat -->
+          <p class="text-xs sm:text-[13px] text-slate-500 font-medium">
+            Buku induk persediaan dan pengawasan stok ATK internal.
+          </p>
         </div>
       </div>
 
