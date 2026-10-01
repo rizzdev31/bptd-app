@@ -336,55 +336,55 @@
       
       <!-- Interactive ApexCharts Column Chart -->
       <div class="mt-4 pt-1">
-        <div id="monthlyRecapChart" class="w-full h-56 -ml-2"></div>
+        <div id="monthlyRecapChart" data-series="{{ json_encode($monthlyStockOutData) }}" class="w-full h-56 -ml-2"></div>
       </div>
     </div>
 
-    <!-- Center Column: Traffic Inventory (4 cols) -->
+    <!-- Center Column: Traffic Distribusi ATK (4 cols) -->
     <div
       class="dash-stagger dash-delay-3 dash-interactive-card lg:col-span-4 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm flex flex-col justify-between"
     >
       <div class="flex items-center justify-between">
-        <h3 class="text-base font-bold text-slate-900">Traffic Inventory</h3>
-        <span class="text-xs font-semibold text-slate-400 bg-slate-100 px-2 py-0.5 rounded-md">Tren 30 Hari</span>
+        <h3 class="text-base font-bold text-slate-900">Traffic Distribusi ATK</h3>
+        <span class="text-xs font-semibold text-slate-400 bg-slate-100 px-2.5 py-0.5 rounded-md">Bulan {{ date('F Y') }}</span>
       </div>
       <div class="my-auto space-y-6 pt-4 pb-2">
-        <!-- Metric 1: User Peminjaman (1,235 UP) -->
+        <!-- Metric 1: Permintaan Terlayani Bulan Ini -->
         <div class="flex items-center justify-between gap-4">
           <!-- Animated Area Sparkline -->
-          <div id="sparklineBorrow" class="w-28 sm:w-32 h-12 flex items-center"></div>
+          <div id="sparklineBorrow" data-series="{{ json_encode($sparklineTx) }}" class="w-28 sm:w-32 h-12 flex items-center"></div>
           
           <!-- Numbers -->
           <div class="text-right">
             <div
               class="flex items-center justify-end gap-1 text-2xl font-extrabold text-slate-900"
             >
-              <span class="dash-counter" data-target="1235" data-format-number="true">0</span>
+              <span class="dash-counter" data-target="{{ $monthStockOutCount }}" data-format-number="true">0</span>
               <span class="text-emerald-500 text-xl font-bold">↑</span>
             </div>
             <p class="text-xs text-slate-500 font-medium mt-0.5">
-              User Peminjaman
+              Permintaan Terlayani
             </p>
           </div>
         </div>
 
-        <!-- Metric 2: Barang Berkurang (456 DOWN) -->
+        <!-- Metric 2: Unit Fisik Didistribusikan -->
         <div
           class="flex items-center justify-between gap-4 border-t border-slate-100 pt-5"
         >
           <!-- Animated Area Sparkline -->
-          <div id="sparklineReduced" class="w-28 sm:w-32 h-12 flex items-center"></div>
+          <div id="sparklineReduced" data-series="{{ json_encode($sparklineQty) }}" class="w-28 sm:w-32 h-12 flex items-center"></div>
           
           <!-- Numbers -->
           <div class="text-right">
             <div
               class="flex items-center justify-end gap-1 text-2xl font-extrabold text-slate-900"
             >
-              <span class="dash-counter" data-target="456" data-format-number="true">0</span>
-              <span class="text-red-400 text-xl font-bold">↓</span>
+              <span class="dash-counter" data-target="{{ $monthQuantityOut }}" data-format-number="true">0</span>
+              <span class="text-blue-600 text-xl font-bold">↓</span>
             </div>
             <p class="text-xs text-slate-500 font-medium mt-0.5">
-              Barang Berkurang
+              Fisik Unit Terdistribusi
             </p>
           </div>
         </div>
@@ -433,19 +433,37 @@
     </div>
   </div>
 
-  <!-- 3. Bottom Section: Data Real Time Inventory Apps Table -->
+    <!-- 3. Bottom Section: Data Real Time Permintaan & Pengeluaran ATK -->
   <div class="dash-stagger dash-delay-5 space-y-3 pt-2">
-    <div class="flex items-center justify-between">
-      <h3 class="text-xl font-bold text-slate-900">
-        Data Real Time
-        <span class="font-normal text-slate-700">Inventory Apps</span>
-      </h3>
-      <div class="flex items-center gap-2 text-xs font-semibold text-slate-500">
-        <span class="relative flex h-2 w-2">
-          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-          <span class="relative inline-flex rounded-full h-2 w-2 bg-blue-600"></span>
-        </span>
-        Sinkronisasi Otomatis
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+      <div>
+        <h3 class="text-xl font-bold text-slate-900">
+          Data Real Time
+          <span class="font-normal text-slate-600">Permintaan &amp; Pengeluaran ATK</span>
+        </h3>
+        <p class="text-xs text-slate-500 font-medium mt-0.5">
+          Aktivitas mutasi distribusi barang persediaan BPTD Kelas II Jawa Timur
+        </p>
+      </div>
+
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 text-xs font-semibold text-slate-500 bg-white px-3 py-1.5 rounded-xl border border-slate-200/80 shadow-2xs">
+          <span class="relative flex h-2 w-2">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-600"></span>
+          </span>
+          Sinkronisasi Live
+        </div>
+
+        <a
+          href="{{ route('inventory.stock-out.index') }}"
+          class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition"
+        >
+          <svg class="w-3.5 h-3.5 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4" />
+          </svg>
+          <span>Kasir POS ATK</span>
+        </a>
       </div>
     </div>
     
@@ -455,443 +473,126 @@
       <div class="overflow-x-auto">
         <table class="w-full text-left text-xs sm:text-sm text-slate-600">
           <thead
-            class="bg-slate-50/75 text-slate-800 font-bold border-b border-slate-100 text-xs"
+            class="bg-slate-50/75 text-slate-800 font-bold border-b border-slate-100 text-xs uppercase tracking-wider"
           >
             <tr>
-              <th class="py-4 px-5 w-12 text-center" scope="col">
-                <input
-                  class="rounded border-slate-300 text-blue-600 focus:ring-0 focus:ring-offset-0"
-                  type="checkbox"
-                />
-              </th>
-              <th class="py-4 px-4 font-bold" scope="col">ID</th>
-              <th class="py-4 px-4 font-bold" scope="col">NIP</th>
-              <th class="py-4 px-4 font-bold" scope="col">Nama Pegawai</th>
-              <th class="py-4 px-4 font-bold" scope="col">Jenis Pengajuan</th>
-              <th class="py-4 px-4 font-bold" scope="col">Nama Barang</th>
-              <th class="py-4 px-4 font-bold" scope="col">Status</th>
+              <th class="py-4 px-4 text-center w-12" scope="col">No</th>
+              <th class="py-4 px-4 font-bold" scope="col">No. Bukti Transaksi</th>
+              <th class="py-4 px-4 font-bold" scope="col">Tanggal</th>
+              <th class="py-4 px-4 font-bold" scope="col">Pegawai Penerima</th>
+              <th class="py-4 px-4 font-bold" scope="col">Unit Kerja / Seksi</th>
+              <th class="py-4 px-4 font-bold" scope="col">Rincian Barang Diminta</th>
+              <th class="py-4 px-4 font-bold text-center" scope="col">Total Fisik</th>
+              <th class="py-4 px-4 font-bold text-center" scope="col">Status</th>
               <th class="py-4 px-4 font-bold text-center" scope="col">Aksi</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-slate-100 font-normal">
-            <!-- Row 1: PGJ-001 Sukses -->
-            <tr class="hover:bg-blue-50/40 transition-colors duration-150">
-              <td class="py-4 px-5 text-center">
-                <input
-                  class="rounded border-slate-300 text-blue-600 focus:ring-0 focus:ring-offset-0"
-                  type="checkbox"
-                />
-              </td>
-              <td class="py-4 px-4 font-medium text-slate-800">PGJ-001</td>
-              <td class="py-4 px-4 text-slate-600 font-mono text-xs">0192648989</td>
-              <td class="py-4 px-4 text-slate-800 font-medium">
-                Muhammad Ulil
-              </td>
-              <td class="py-4 px-4">
-                <span
-                  class="inline-block px-3 py-1 rounded-md border border-blue-400 text-blue-600 text-[11px] font-semibold bg-blue-50/50"
-                >
-                  Permintaan
-                </span>
-              </td>
-              <td class="py-4 px-4 text-slate-700">Bulpoin</td>
-              <td class="py-4 px-4">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold">
-                  <span class="relative flex h-1.5 w-1.5">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+            @forelse ($recentStockOuts as $index => $tx)
+              <tr class="hover:bg-blue-50/40 transition-colors duration-150">
+                <td class="py-3.5 px-4 text-center font-semibold text-slate-400 text-xs">
+                  {{ $index + 1 }}
+                </td>
+                <td class="py-3.5 px-4">
+                  <a
+                    href="{{ route('inventory.stock-out.index', ['tab' => 'history', 'history_keyword' => $tx->transaction_number]) }}"
+                    class="font-bold text-blue-700 hover:text-blue-800 tracking-tight block hover:underline"
+                  >
+                    {{ $tx->transaction_number }}
+                  </a>
+                  @if ($tx->notes)
+                    <span class="text-[11px] text-slate-400 truncate max-w-xs block" title="{{ $tx->notes }}">
+                      {{ $tx->notes }}
+                    </span>
+                  @endif
+                </td>
+                <td class="py-3.5 px-4 whitespace-nowrap text-slate-700 font-medium">
+                  {{ $tx->transaction_date->format('d/m/Y') }}
+                </td>
+                <td class="py-3.5 px-4">
+                  <span class="font-bold text-slate-900 block leading-tight">
+                    {{ $tx->recipient_name }}
                   </span>
-                  Sukses
-                </span>
-              </td>
-              <td class="py-4 px-4">
-                <div class="flex items-center justify-center gap-2.5">
-                  <!-- Checkmark Green -->
-                  <button
-                    class="text-emerald-500 hover:text-emerald-600 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Setujui"
-                    type="button"
-                  >
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="9"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      ></circle>
-                      <path
-                        d="M8 12l2.5 2.5L16 9"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </svg>
-                  </button>
-                  <!-- External Link Amber -->
-                  <button
-                    class="text-amber-500 hover:text-amber-600 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Detail"
-                    type="button"
-                  >
-                    <svg
-                      class="w-4 h-4 stroke-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </svg>
-                  </button>
-                  <!-- Lock Black -->
-                  <button
-                    class="text-slate-700 hover:text-slate-900 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Kunci"
-                    type="button"
-                  >
-                    <svg
-                      class="w-4 h-4 stroke-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <rect height="10" rx="2" width="14" x="5" y="11"></rect>
-                      <path d="M8 11V7a4 4 0 018 0v4"></path>
-                    </svg>
-                  </button>
-                  <!-- Three Dots Vertical -->
-                  <button
-                    class="text-slate-400 hover:text-slate-700 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Menu Lain"
-                    type="button"
-                  >
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                      <path
-                        d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <!-- Row 2: PGJ-002 Sukses -->
-            <tr class="hover:bg-blue-50/40 transition-colors duration-150">
-              <td class="py-4 px-5 text-center">
-                <input
-                  class="rounded border-slate-300 text-blue-600 focus:ring-0 focus:ring-offset-0"
-                  type="checkbox"
-                />
-              </td>
-              <td class="py-4 px-4 font-medium text-slate-800">PGJ-002</td>
-              <td class="py-4 px-4 text-slate-600 font-mono text-xs">0192648989</td>
-              <td class="py-4 px-4 text-slate-800 font-medium">
-                Muhammad Ulil
-              </td>
-              <td class="py-4 px-4">
-                <span
-                  class="inline-block px-3 py-1 rounded-md border border-blue-400 text-blue-600 text-[11px] font-semibold bg-blue-50/50"
-                >
-                  Permintaan
-                </span>
-              </td>
-              <td class="py-4 px-4 text-slate-700">Bulpoin</td>
-              <td class="py-4 px-4">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-semibold">
-                  <span class="relative flex h-1.5 w-1.5">
-                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                    <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                  @if ($tx->recipient_nip)
+                    <span class="text-xs text-slate-500 font-medium">NIP: {{ $tx->recipient_nip }}</span>
+                  @endif
+                </td>
+                <td class="py-3.5 px-4">
+                  <span class="inline-block px-2.5 py-0.5 rounded-md bg-slate-100 text-slate-700 font-semibold text-xs">
+                    {{ $tx->recipient_unit ?: '-' }}
                   </span>
-                  Sukses
-                </span>
-              </td>
-              <td class="py-4 px-4">
-                <div class="flex items-center justify-center gap-2.5">
-                  <button
-                    class="text-emerald-500 hover:text-emerald-600 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Setujui"
-                    type="button"
-                  >
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      viewBox="0 0 24 24"
+                </td>
+                <td class="py-3.5 px-4 max-w-xs">
+                  <div class="flex flex-wrap gap-1">
+                    @foreach ($tx->details->take(2) as $d)
+                      <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded text-[11px] bg-slate-100 text-slate-700 border border-slate-200 font-medium">
+                        {{ $d->item_name }} ({{ $d->quantity }} {{ $d->unit }})
+                      </span>
+                    @endforeach
+                    @if ($tx->details->count() > 2)
+                      <span class="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-bold bg-blue-50 text-blue-700">
+                        +{{ $tx->details->count() - 2 }} lainnya
+                      </span>
+                    @endif
+                  </div>
+                </td>
+                <td class="py-3.5 px-4 text-center font-bold text-slate-900 whitespace-nowrap">
+                  {{ number_format($tx->total_quantity) }} Unit
+                </td>
+                <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold">
+                    <span class="relative flex h-1.5 w-1.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                    </span>
+                    Terdistribusi
+                  </span>
+                </td>
+                <td class="py-3.5 px-4 text-center whitespace-nowrap">
+                  <div class="flex items-center justify-center gap-1.5">
+                    <a
+                      href="{{ route('inventory.stock-out.print', $tx) }}"
+                      target="_blank"
+                      class="p-1.5 rounded-lg text-slate-500 hover:text-emerald-600 hover:bg-emerald-50 border border-transparent hover:scale-110 active:scale-95 transition"
+                      title="Cetak Surat Bukti Pengeluaran Barang (SBPB)"
                     >
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="9"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      ></circle>
-                      <path
-                        d="M8 12l2.5 2.5L16 9"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </svg>
-                  </button>
-                  <button
-                    class="text-amber-500 hover:text-amber-600 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Detail"
-                    type="button"
-                  >
-                    <svg
-                      class="w-4 h-4 stroke-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
+                      <svg class="w-4 h-4 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+                      </svg>
+                    </a>
+                    <a
+                      href="{{ route('inventory.stock-out.index', ['tab' => 'history', 'history_keyword' => $tx->transaction_number]) }}"
+                      class="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 border border-transparent hover:scale-110 active:scale-95 transition"
+                      title="Buka di Riwayat SBPB"
                     >
-                      <path
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
+                      <svg class="w-4 h-4 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                      </svg>
+                    </a>
+                  </div>
+                </td>
+              </tr>
+            @empty
+              <tr>
+                <td colspan="9" class="py-12 text-center text-slate-400">
+                  <div class="max-w-xs mx-auto space-y-2">
+                    <svg class="w-10 h-10 mx-auto text-slate-300 stroke-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                     </svg>
-                  </button>
-                  <button
-                    class="text-slate-700 hover:text-slate-900 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Kunci"
-                    type="button"
-                  >
-                    <svg
-                      class="w-4 h-4 stroke-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <rect height="10" rx="2" width="14" x="5" y="11"></rect>
-                      <path d="M8 11V7a4 4 0 018 0v4"></path>
-                    </svg>
-                  </button>
-                  <button
-                    class="text-slate-400 hover:text-slate-700 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Menu Lain"
-                    type="button"
-                  >
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                      <path
-                        d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <!-- Row 3: PGJ-003 Di Tolak -->
-            <tr class="hover:bg-blue-50/40 transition-colors duration-150">
-              <td class="py-4 px-5 text-center">
-                <input
-                  class="rounded border-slate-300 text-blue-600 focus:ring-0 focus:ring-offset-0"
-                  type="checkbox"
-                />
-              </td>
-              <td class="py-4 px-4 font-medium text-slate-800">PGJ-003</td>
-              <td class="py-4 px-4 text-slate-600 font-mono text-xs">0192648989</td>
-              <td class="py-4 px-4 text-slate-800 font-medium">
-                Muhammad Ulil
-              </td>
-              <td class="py-4 px-4">
-                <span
-                  class="inline-block px-3 py-1 rounded-md border border-blue-400 text-blue-600 text-[11px] font-semibold bg-blue-50/50"
-                >
-                  Permintaan
-                </span>
-              </td>
-              <td class="py-4 px-4 text-slate-700">Bulpoin</td>
-              <td class="py-4 px-4">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-rose-50 text-rose-700 border border-rose-200 text-[11px] font-semibold">
-                  <span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span>
-                  Di Tolak
-                </span>
-              </td>
-              <td class="py-4 px-4">
-                <div class="flex items-center justify-center gap-2.5">
-                  <button
-                    class="text-emerald-500 hover:text-emerald-600 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Setujui"
-                    type="button"
-                  >
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="9"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      ></circle>
-                      <path
-                        d="M8 12l2.5 2.5L16 9"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </svg>
-                  </button>
-                  <button
-                    class="text-amber-500 hover:text-amber-600 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Detail"
-                    type="button"
-                  >
-                    <svg
-                      class="w-4 h-4 stroke-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </svg>
-                  </button>
-                  <button
-                    class="text-slate-700 hover:text-slate-900 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Kunci"
-                    type="button"
-                  >
-                    <svg
-                      class="w-4 h-4 stroke-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <rect height="10" rx="2" width="14" x="5" y="11"></rect>
-                      <path d="M8 11V7a4 4 0 018 0v4"></path>
-                    </svg>
-                  </button>
-                  <button
-                    class="text-slate-400 hover:text-slate-700 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Menu Lain"
-                    type="button"
-                  >
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                      <path
-                        d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
-            <!-- Row 4: PHJ-004 Di Tolak -->
-            <tr class="hover:bg-blue-50/40 transition-colors duration-150">
-              <td class="py-4 px-5 text-center">
-                <input
-                  class="rounded border-slate-300 text-blue-600 focus:ring-0 focus:ring-offset-0"
-                  type="checkbox"
-                />
-              </td>
-              <td class="py-4 px-4 font-medium text-slate-800">PHJ-004</td>
-              <td class="py-4 px-4 text-slate-600 font-mono text-xs">0192648989</td>
-              <td class="py-4 px-4 text-slate-800 font-medium">
-                Muhammad Ulil
-              </td>
-              <td class="py-4 px-4">
-                <span
-                  class="inline-block px-3 py-1 rounded-md border border-blue-400 text-blue-600 text-[11px] font-semibold bg-blue-50/50"
-                >
-                  Permintaan
-                </span>
-              </td>
-              <td class="py-4 px-4 text-slate-700">Bulpoin</td>
-              <td class="py-4 px-4">
-                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-rose-50 text-rose-700 border border-rose-200 text-[11px] font-semibold">
-                  <span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span>
-                  Di Tolak
-                </span>
-              </td>
-              <td class="py-4 px-4">
-                <div class="flex items-center justify-center gap-2.5">
-                  <button
-                    class="text-emerald-500 hover:text-emerald-600 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Setujui"
-                    type="button"
-                  >
-                    <svg
-                      class="w-4 h-4"
-                      fill="none"
-                      stroke="currentColor"
-                      stroke-width="2.5"
-                      viewBox="0 0 24 24"
-                    >
-                      <circle
-                        cx="12"
-                        cy="12"
-                        r="9"
-                        stroke="currentColor"
-                        stroke-width="2"
-                      ></circle>
-                      <path
-                        d="M8 12l2.5 2.5L16 9"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </svg>
-                  </button>
-                  <button
-                    class="text-amber-500 hover:text-amber-600 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Detail"
-                    type="button"
-                  >
-                    <svg
-                      class="w-4 h-4 stroke-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        stroke-linecap="round"
-                        stroke-linejoin="round"
-                      ></path>
-                    </svg>
-                  </button>
-                  <button
-                    class="text-slate-700 hover:text-slate-900 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Kunci"
-                    type="button"
-                  >
-                    <svg
-                      class="w-4 h-4 stroke-2"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <rect height="10" rx="2" width="14" x="5" y="11"></rect>
-                      <path d="M8 11V7a4 4 0 018 0v4"></path>
-                    </svg>
-                  </button>
-                  <button
-                    class="text-slate-400 hover:text-slate-700 p-1 hover:scale-115 active:scale-95 transition-transform"
-                    title="Menu Lain"
-                    type="button"
-                  >
-                    <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24">
-                      <path
-                        d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"
-                      ></path>
-                    </svg>
-                  </button>
-                </div>
-              </td>
-            </tr>
+                    <p class="font-semibold text-slate-600 text-sm">Belum Ada Transaksi Pengeluaran</p>
+                    <p class="text-xs text-slate-400">Permintaan atau pengeluaran barang persediaan akan muncul di sini secara real-time.</p>
+                    <div class="pt-2">
+                      <a
+                        href="{{ route('inventory.stock-out.index') }}"
+                        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs transition shadow-xs"
+                      >
+                        Buka Kasir POS Sekarang &rarr;
+                      </a>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            @endforelse
           </tbody>
         </table>
       </div>
@@ -965,8 +666,8 @@
         monthlyEl.setAttribute('data-rendered', 'true');
         const monthlyOptions = {
           series: [{
-            name: 'Distribusi / Pengajuan',
-            data: [42, 68, 55, 78, 90, 82, 64, 75, 88, 70, 85, 94]
+            name: 'Distribusi Fisik ATK',
+            data: JSON.parse(monthlyEl.getAttribute('data-series') || '[0,0,0,0,0,0,0,0,0,0,0,0]')
           }],
           chart: {
             type: 'bar',
@@ -1045,8 +746,8 @@
         borrowEl.setAttribute('data-rendered', 'true');
         const borrowOptions = {
           series: [{
-            name: 'Peminjaman',
-            data: [18, 25, 22, 38, 30, 48, 42, 60, 55, 75]
+            name: 'Permintaan ATK',
+            data: JSON.parse(borrowEl.getAttribute('data-series') || '[0,0,0,0,0,0,0]')
           }],
           chart: {
             type: 'area',
@@ -1097,8 +798,8 @@
         reducedEl.setAttribute('data-rendered', 'true');
         const reducedOptions = {
           series: [{
-            name: 'Pengurangan',
-            data: [45, 40, 48, 35, 32, 28, 25, 20, 24, 16]
+            name: 'Unit Fisik Keluar',
+            data: JSON.parse(reducedEl.getAttribute('data-series') || '[0,0,0,0,0,0,0]')
           }],
           chart: {
             type: 'area',

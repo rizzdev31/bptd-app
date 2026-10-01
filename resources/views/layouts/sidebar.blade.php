@@ -195,16 +195,19 @@
                   @endif
                 </a>
                 <a
-                  href="#"
-                  class="flex w-full items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition group"
+                  href="{{ route('inventory.stock-out.index') }}"
+                  class="flex w-full items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition group {{ request()->routeIs('inventory.stock-out.*') ? 'text-blue-700 bg-blue-50 font-bold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}"
                 >
                   <span class="flex items-center gap-2">
                     <span
-                      class="w-5 h-5 rounded-md bg-slate-100 group-hover:bg-blue-100 group-hover:text-blue-600 text-slate-500 font-mono text-[10px] flex items-center justify-center font-bold transition"
+                      class="w-5 h-5 rounded-md font-mono text-[10px] flex items-center justify-center font-bold transition {{ request()->routeIs('inventory.stock-out.*') ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-100 group-hover:bg-blue-100 group-hover:text-blue-600 text-slate-500' }}"
                       >2</span
                     >
-                    <span class="">Permintaan/Pengeluaran</span>
+                    <span>Permintaan/Pengeluaran</span>
                   </span>
+                  @if (request()->routeIs('inventory.stock-out.*'))
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                  @endif
                 </a>
                 <a
                   href="#"

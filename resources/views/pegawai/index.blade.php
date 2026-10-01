@@ -34,14 +34,14 @@
       </p>
     </div>
 
-    <!-- Add Button Trigger (Ministry Navy & Gold Palette - Harmonized with Master ATK) -->
+    <!-- Add Button Trigger (Synchronized with Dashboard Palette) -->
     <div class="flex items-center gap-3">
       <button
         type="button"
         onclick="openCreateModal()"
-        class="inline-flex items-center justify-center gap-2 h-11 px-4.5 rounded-xl bg-[#0b2341] hover:bg-[#13335e] active:scale-[0.98] text-white font-semibold text-xs sm:text-sm border border-amber-400/30 shadow-sm shadow-[#0b2341]/20 transition-all hover:brightness-105 cursor-pointer"
+        class="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 active:scale-[0.98] text-white font-semibold text-xs sm:text-sm shadow-sm shadow-blue-600/25 transition-all cursor-pointer"
       >
-        <svg class="w-4 h-4 text-amber-400 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 text-white stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
         </svg>
         <span>Tambah Pegawai Baru</span>

@@ -111,6 +111,84 @@
       .min-h-22 {
         min-height: 88px;
       }
+      .max-h-155 {
+        max-height: 620px;
+      }
+
+      /* ============================================================== */
+      /* Smooth Entrance & Interactive Micro-Animations                */
+      /* ============================================================== */
+      @keyframes bptdFadeInUp {
+        0% {
+          opacity: 0;
+          transform: translateY(12px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes bptdFadeIn {
+        0% { opacity: 0; }
+        100% { opacity: 1; }
+      }
+
+      @keyframes bptdScaleIn {
+        0% {
+          opacity: 0;
+          transform: scale(0.96) translateY(6px);
+        }
+        100% {
+          opacity: 1;
+          transform: scale(1) translateY(0);
+        }
+      }
+
+      @keyframes bptdGaugeCircle {
+        0% {
+          stroke-dashoffset: 91;
+        }
+      }
+
+      .anim-fade-in-up {
+        animation: bptdFadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .anim-fade-in {
+        animation: bptdFadeIn 0.3s ease-out both;
+      }
+
+      .anim-scale-in,
+      .animate-scale-in {
+        animation: bptdScaleIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+
+      .gauge-animated {
+        animation: bptdGaugeCircle 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      }
+
+      /* Stagger Delays */
+      .anim-delay-50  { animation-delay: 50ms; }
+      .anim-delay-100 { animation-delay: 100ms; }
+      .anim-delay-150 { animation-delay: 150ms; }
+      .anim-delay-200 { animation-delay: 200ms; }
+      .anim-delay-250 { animation-delay: 250ms; }
+      .anim-delay-300 { animation-delay: 300ms; }
+      .anim-delay-350 { animation-delay: 350ms; }
+      .anim-delay-400 { animation-delay: 400ms; }
+
+      @media (prefers-reduced-motion: reduce) {
+        .anim-fade-in-up,
+        .anim-fade-in,
+        .anim-scale-in,
+        .animate-scale-in,
+        .gauge-animated {
+          animation: none !important;
+          opacity: 1 !important;
+          transform: none !important;
+        }
+      }
     </style>
     @stack('styles')
   </head>

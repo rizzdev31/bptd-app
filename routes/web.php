@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\Inventory\StockOutController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\RolePermissionController;
 use Illuminate\Support\Facades\Route;
@@ -28,12 +29,19 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/pegawai/{recipient}', [EmployeeController::class, 'update'])->name('pegawai.update');
     Route::delete('/pegawai/{recipient}', [EmployeeController::class, 'destroy'])->name('pegawai.destroy');
 
-    // Master Inventory ATK (Submenu 1: Data Master ATK)
+    // Master Inventory ATK
     Route::prefix('inventory')->name('inventory.')->group(function () {
+        // Submenu 1: Data Master ATK
         Route::get('/items', [ItemController::class, 'index'])->name('items.index');
         Route::post('/items', [ItemController::class, 'store'])->name('items.store');
         Route::put('/items/{item}', [ItemController::class, 'update'])->name('items.update');
         Route::delete('/items/{item}', [ItemController::class, 'destroy'])->name('items.destroy');
+
+        // Submenu 2: Permintaan / Pengeluaran ATK (Kasir POS Distribusi)
+        Route::get('/stock-out', [StockOutController::class, 'index'])->name('stock-out.index');
+        Route::post('/stock-out', [StockOutController::class, 'store'])->name('stock-out.store');
+        Route::get('/stock-out/{stockOut}', [StockOutController::class, 'show'])->name('stock-out.show');
+        Route::get('/stock-out/{stockOut}/print', [StockOutController::class, 'print'])->name('stock-out.print');
     });
 
     // Pengaturan Sistem / Role & Hak Akses

@@ -3,7 +3,7 @@
 @section('title', 'Role & Hak Akses - BPTD Kelas II Jawa Timur')
 
 @section('content')
-<main class="flex-1 max-w-[1720px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-7 space-y-7">
+<main class="flex-1 max-w-430 w-full mx-auto px-4 sm:px-6 lg:px-8 py-7 space-y-7">
   <!-- Header & Breadcrumb -->
   <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
     <div class="space-y-1">
@@ -353,7 +353,7 @@
 </main>
 
 <!-- Modal: Tambah Peran Baru -->
-<div id="modal-add-role" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+<div id="modal-add-role" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/50 backdrop-blur-xs items-center justify-center p-4">
   <div class="bg-white rounded-2xl max-w-md w-full border border-slate-200 shadow-xl overflow-hidden animate-scale-in">
     <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
       <div class="flex items-center gap-2.5">
@@ -428,12 +428,12 @@
 </div>
 
 <!-- Modal: Edit Peran -->
-<div id="modal-edit-role" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/50 backdrop-blur-xs flex items-center justify-center p-4">
+<div id="modal-edit-role" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/50 backdrop-blur-xs items-center justify-center p-4">
   <div class="bg-white rounded-2xl max-w-md w-full border border-slate-200 shadow-xl overflow-hidden animate-scale-in">
     <div class="px-6 py-4 border-b border-slate-100 flex items-center justify-between bg-slate-50/60">
       <div class="flex items-center gap-2.5">
         <div class="w-8 h-8 rounded-xl bg-blue-100 text-blue-600 flex items-center justify-center">
-          <svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
           </svg>
         </div>
@@ -504,6 +504,7 @@
     const el = document.getElementById(id);
     if (el) {
       el.classList.remove('hidden');
+      el.classList.add('flex');
       document.body.classList.add('overflow-hidden');
     }
   }
@@ -512,6 +513,7 @@
     const el = document.getElementById(id);
     if (el) {
       el.classList.add('hidden');
+      el.classList.remove('flex');
       document.body.classList.remove('overflow-hidden');
     }
   }

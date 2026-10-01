@@ -42,6 +42,8 @@ class ItemSeeder extends Seeder
                 'category_id' => $catKertas?->id,
                 'unit_id' => $unitRim?->id,
                 'unit' => 'Rim',
+                'small_unit' => 'Rim',
+                'conversion_rate' => 1,
                 'minimum_stock' => 20,
                 'target_stock' => 100,
                 'current_stock' => 65,
@@ -57,6 +59,8 @@ class ItemSeeder extends Seeder
                 'category_id' => $catKertas?->id,
                 'unit_id' => $unitRim?->id,
                 'unit' => 'Rim',
+                'small_unit' => 'Rim',
+                'conversion_rate' => 1,
                 'minimum_stock' => 15,
                 'target_stock' => 80,
                 'current_stock' => 8, // Low stock
@@ -72,13 +76,15 @@ class ItemSeeder extends Seeder
                 'category_id' => $catAlatTulis?->id,
                 'unit_id' => $unitBox?->id,
                 'unit' => 'Box',
-                'minimum_stock' => 10,
-                'target_stock' => 50,
-                'current_stock' => 32,
+                'small_unit' => 'Pcs',
+                'conversion_rate' => 12, // 1 Box = 12 Pcs
+                'minimum_stock' => 120, // 10 Box
+                'target_stock' => 600, // 50 Box
+                'current_stock' => 384, // 32 Box (384 Pcs)
                 'storage_location' => 'Lemari 1 - Laci 2',
                 'supplier_id' => $sup3?->id,
                 'status' => 'active',
-                'description' => 'Pulpen ballpoint reguler untuk operasional staf kantor harian',
+                'description' => 'Pulpen ballpoint reguler untuk operasional staf kantor harian (1 Box = 12 Pcs)',
             ],
             [
                 'code' => 'ATK-2026-0004',
@@ -87,13 +93,15 @@ class ItemSeeder extends Seeder
                 'category_id' => $catAlatTulis?->id,
                 'unit_id' => $unitLusin?->id,
                 'unit' => 'Lusin',
-                'minimum_stock' => 5,
-                'target_stock' => 25,
-                'current_stock' => 3, // Low stock
+                'small_unit' => 'Pcs',
+                'conversion_rate' => 12, // 1 Lusin = 12 Pcs
+                'minimum_stock' => 60, // 5 Lusin
+                'target_stock' => 300, // 25 Lusin
+                'current_stock' => 36, // 3 Lusin (36 Pcs) - Low stock
                 'storage_location' => 'Lemari 1 - Laci 3',
                 'supplier_id' => $sup1?->id,
                 'status' => 'active',
-                'description' => 'Pulpen tanda tangan pimpinan dan pejabat pembuat komitmen (PPK)',
+                'description' => 'Pulpen tanda tangan pimpinan dan pejabat pembuat komitmen (1 Lusin = 12 Pcs)',
             ],
             [
                 'code' => 'ATK-2026-0005',
@@ -102,13 +110,15 @@ class ItemSeeder extends Seeder
                 'category_id' => $catAlatTulis?->id,
                 'unit_id' => $unitLusin?->id,
                 'unit' => 'Lusin',
-                'minimum_stock' => 6,
-                'target_stock' => 30,
-                'current_stock' => 14,
+                'small_unit' => 'Pcs',
+                'conversion_rate' => 12, // 1 Lusin = 12 Pcs
+                'minimum_stock' => 72, // 6 Lusin
+                'target_stock' => 360, // 30 Lusin
+                'current_stock' => 168, // 14 Lusin (168 Pcs)
                 'storage_location' => 'Lemari 1 - Laci 4',
                 'supplier_id' => $sup3?->id,
                 'status' => 'active',
-                'description' => 'Spidol papan tulis ruang rapat dan briefing lapangan BPTD',
+                'description' => 'Spidol papan tulis ruang rapat dan briefing lapangan BPTD (1 Lusin = 12 Pcs)',
             ],
             [
                 'code' => 'ATK-2026-0006',
@@ -117,6 +127,8 @@ class ItemSeeder extends Seeder
                 'category_id' => $catAlatTulis?->id,
                 'unit_id' => $unitPcs?->id,
                 'unit' => 'Pcs',
+                'small_unit' => 'Pcs',
+                'conversion_rate' => 1,
                 'minimum_stock' => 15,
                 'target_stock' => 50,
                 'current_stock' => 0, // Out of stock
@@ -132,13 +144,15 @@ class ItemSeeder extends Seeder
                 'category_id' => $catMap?->id,
                 'unit_id' => $unitPack?->id,
                 'unit' => 'Pack',
-                'minimum_stock' => 10,
-                'target_stock' => 40,
-                'current_stock' => 22,
+                'small_unit' => 'Pcs',
+                'conversion_rate' => 10, // 1 Pack = 10 Pcs
+                'minimum_stock' => 100, // 10 Pack
+                'target_stock' => 400, // 40 Pack
+                'current_stock' => 220, // 22 Pack (220 Pcs)
                 'storage_location' => 'Rak B - Sekat 1',
                 'supplier_id' => $sup2?->id,
                 'status' => 'active',
-                'description' => 'Map berkas administrasi pengawasan dan penegakan hukum',
+                'description' => 'Map berkas administrasi pengawasan dan penegakan hukum (1 Pack = 10 Pcs)',
             ],
             [
                 'code' => 'ATK-2026-0008',
@@ -147,13 +161,15 @@ class ItemSeeder extends Seeder
                 'category_id' => $catMap?->id,
                 'unit_id' => $unitPack?->id,
                 'unit' => 'Pack',
-                'minimum_stock' => 8,
-                'target_stock' => 30,
+                'small_unit' => 'Pcs',
+                'conversion_rate' => 10, // 1 Pack = 10 Pcs
+                'minimum_stock' => 80,
+                'target_stock' => 300,
                 'current_stock' => 0, // Out of stock
                 'storage_location' => 'Rak B - Sekat 3',
                 'supplier_id' => $sup2?->id,
                 'status' => 'active',
-                'description' => 'Map plastik bening pelindung dokumen disposisi penting',
+                'description' => 'Map plastik bening pelindung dokumen disposisi penting (1 Pack = 10 Pcs)',
             ],
             [
                 'code' => 'ATK-2026-0009',
@@ -162,6 +178,8 @@ class ItemSeeder extends Seeder
                 'category_id' => $catArsip?->id,
                 'unit_id' => $unitPcs?->id,
                 'unit' => 'Pcs',
+                'small_unit' => 'Pcs',
+                'conversion_rate' => 1,
                 'minimum_stock' => 12,
                 'target_stock' => 50,
                 'current_stock' => 28,
@@ -177,6 +195,8 @@ class ItemSeeder extends Seeder
                 'category_id' => $catMeja?->id,
                 'unit_id' => $unitSet?->id,
                 'unit' => 'Set',
+                'small_unit' => 'Set',
+                'conversion_rate' => 1,
                 'minimum_stock' => 5,
                 'target_stock' => 20,
                 'current_stock' => 11,
@@ -192,6 +212,8 @@ class ItemSeeder extends Seeder
                 'category_id' => $catCetak?->id,
                 'unit_id' => $unitBuku?->id,
                 'unit' => 'Buku',
+                'small_unit' => 'Buku',
+                'conversion_rate' => 1,
                 'minimum_stock' => 5,
                 'target_stock' => 20,
                 'current_stock' => 2, // Low stock
@@ -207,13 +229,15 @@ class ItemSeeder extends Seeder
                 'category_id' => $catCetak?->id,
                 'unit_id' => $unitBox?->id,
                 'unit' => 'Box',
-                'minimum_stock' => 10,
-                'target_stock' => 40,
-                'current_stock' => 18,
+                'small_unit' => 'Lembar',
+                'conversion_rate' => 100, // 1 Box = 100 Lembar
+                'minimum_stock' => 1000, // 10 Box
+                'target_stock' => 4000, // 40 Box
+                'current_stock' => 1800, // 18 Box (1800 Lembar)
                 'storage_location' => 'Gudang ATK - Rak B2',
                 'supplier_id' => $sup2?->id,
                 'status' => 'active',
-                'description' => 'Amplop dinas resmi ukuran panjang berkop Kemenhub BPTD',
+                'description' => 'Amplop dinas resmi ukuran panjang berkop Kemenhub BPTD (1 Box = 100 Lembar)',
             ],
         ];
 

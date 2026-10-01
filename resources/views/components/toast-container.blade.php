@@ -1,7 +1,7 @@
 <!-- BEGIN: Global Floating Toast Notification Container -->
 <div
   id="toast-container"
-  class="fixed top-5 right-5 z-[99999] flex flex-col gap-3 pointer-events-none max-w-sm sm:max-w-md w-full px-4 sm:px-0"
+  class="fixed top-5 right-5 z-99999 flex flex-col gap-3 pointer-events-none max-w-sm sm:max-w-md w-full px-4 sm:px-0"
   aria-live="polite"
   aria-atomic="true"
 ></div>
@@ -71,6 +71,15 @@
         barColor: 'bg-rose-500',
         iconSvg: `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12"></path></svg>`
       },
+      danger: {
+        bg: 'bg-white',
+        border: 'border-rose-200/90',
+        badgeBg: 'bg-rose-100 text-rose-800',
+        badgeText: 'GAGAL',
+        iconBg: 'bg-rose-500 text-white',
+        barColor: 'bg-rose-500',
+        iconSvg: `<svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" d="M6 18L18 6M6 6l12 12"></path></svg>`
+      },
       info: {
         bg: 'bg-white',
         border: 'border-blue-200/90',
@@ -82,15 +91,29 @@
       }
     };
 
-    window.showToast = function (options) {
+    window.showToast = function (options, typeArg) {
       const container = document.getElementById('toast-container');
       if (!container) return;
 
-      const type = options.type || 'info';
+      let type = 'info';
+      let title = '';
+      let message = '';
+      let duration = 4000;
+
+      if (typeof options === 'string') {
+        message = options;
+        type = typeArg || 'info';
+      } else if (options && typeof options === 'object') {
+        message = options.message || '';
+        type = options.type || typeArg || 'info';
+        title = options.title || '';
+        duration = options.duration || 4000;
+      }
+
+      if (type === 'danger') type = 'error';
+
       const conf = toastConfig[type] || toastConfig.info;
-      const title = options.title || conf.badgeText;
-      const message = options.message || '';
-      const duration = options.duration || 4500;
+      const finalTitle = title || conf.badgeText;
 
       const toast = document.createElement('div');
       toast.className = `toast-enter pointer-events-auto relative overflow-hidden rounded-2xl ${conf.bg} border ${conf.border} shadow-xl shadow-slate-900/5 transition-all`;

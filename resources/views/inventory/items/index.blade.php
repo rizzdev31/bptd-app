@@ -74,7 +74,7 @@
 @endpush
 
 @section('content')
-<main class="main-content flex-1 max-w-[1720px] w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+<main class="main-content flex-1 max-w-430 w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
 
   <!-- ============================================================== -->
   <!-- KOP SURAT DINAS RESMI (Hanya Tampil Saat Dicetak / Print)       -->
@@ -117,7 +117,7 @@
   <!-- ============================================================== -->
   <!-- HEADER BANNER: TATA KELOLA KEMENTERIAN & BUTTONS HORIZONTAL     -->
   <!-- ============================================================== -->
-  <div class="no-print bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 sm:p-6 transition hover:shadow-md">
+  <div class="no-print bg-white rounded-2xl border border-slate-200/90 shadow-xs p-5 sm:p-6 transition hover:shadow-md anim-fade-in-up">
     <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
       
       <!-- Sisi Kiri: Emblem Logo, Hierarki Dinas & Judul Halaman -->
@@ -171,25 +171,25 @@
         <button
           type="button"
           onclick="window.print()"
-          class="inline-flex items-center justify-center gap-2 h-11 px-4 rounded-xl bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-700 hover:text-slate-900 font-semibold text-xs sm:text-sm border border-slate-300 hover:border-slate-400 shadow-xs transition-all active:scale-[0.98] cursor-pointer"
+          class="inline-flex items-center justify-center gap-2.5 h-11 px-5 rounded-xl bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-700 hover:text-slate-900 font-semibold text-xs sm:text-sm border border-slate-300 hover:border-slate-400 shadow-xs transition-all active:scale-[0.98] cursor-pointer whitespace-nowrap shrink-0"
           title="Cetak Berita Acara &amp; Rekapitulasi Inventaris ATK"
         >
-          <svg class="w-4 h-4 text-slate-600 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 text-slate-600 stroke-2 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
           </svg>
-          <span>Cetak Rekap</span>
+          <span class="whitespace-nowrap">Cetak Rekap</span>
         </button>
 
-        <!-- Tombol Registrasi Barang ATK (Primary Dinas Kemenhub) -->
+        <!-- Tombol Registrasi Barang ATK (Sinkron dengan Palet Dashboard) -->
         <button
           type="button"
           onclick="openModal('modal-add-item')"
-          class="inline-flex items-center justify-center gap-2 h-11 px-4.5 rounded-xl bg-[#0b2341] hover:bg-[#13335e] active:scale-[0.98] text-white font-semibold text-xs sm:text-sm border border-amber-400/30 shadow-sm shadow-[#0b2341]/20 transition-all hover:brightness-105 cursor-pointer"
+          class="inline-flex items-center justify-center gap-2 h-11 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 active:scale-[0.98] text-white font-semibold text-xs sm:text-sm shadow-sm shadow-blue-600/25 transition-all cursor-pointer whitespace-nowrap shrink-0"
         >
-          <svg class="w-4 h-4 text-amber-400 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-4 h-4 text-white stroke-[2.5] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path d="M12 4v16m8-8H4" stroke-linecap="round" stroke-linejoin="round"></path>
           </svg>
-          <span>Registrasi Barang ATK</span>
+          <span class="whitespace-nowrap">Registrasi Barang ATK</span>
         </button>
       </div>
 
@@ -200,13 +200,13 @@
   <div class="no-print grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
 
     <!-- Card 1: Total Varian ATK -->
-    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between">
+    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between anim-fade-in-up anim-delay-50">
       <div class="flex items-center gap-4">
         <!-- Circular Gauge -->
         <div class="relative w-16 h-16 shrink-0 flex items-center justify-center">
           <svg class="w-full h-full gauge-circle" viewBox="0 0 36 36">
             <circle cx="18" cy="18" fill="none" r="14.5" stroke="#e0e7ff" stroke-width="3.2"></circle>
-            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#2563eb" stroke-dasharray="91" stroke-dashoffset="15" stroke-linecap="round" stroke-width="3.2"></circle>
+            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#2563eb" stroke-dasharray="91" stroke-dashoffset="15" stroke-linecap="round" stroke-width="3.2" class="gauge-animated"></circle>
           </svg>
           <span class="absolute text-xs font-black text-slate-900 font-mono">{{ $totalItems }}</span>
         </div>
@@ -229,13 +229,13 @@
     </div>
 
     <!-- Card 2: Total Fisik Unit Terakumulasi -->
-    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between">
+    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between anim-fade-in-up anim-delay-100">
       <div class="flex items-center gap-4">
         <!-- Circular Gauge -->
         <div class="relative w-16 h-16 shrink-0 flex items-center justify-center">
           <svg class="w-full h-full gauge-circle" viewBox="0 0 36 36">
             <circle cx="18" cy="18" fill="none" r="14.5" stroke="#f1f5f9" stroke-width="3.2"></circle>
-            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#10b981" stroke-dasharray="91" stroke-dashoffset="25" stroke-linecap="round" stroke-width="3.2"></circle>
+            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#10b981" stroke-dasharray="91" stroke-dashoffset="25" stroke-linecap="round" stroke-width="3.2" class="gauge-animated"></circle>
           </svg>
           <div class="absolute w-7 h-7 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center">
             <svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -262,13 +262,13 @@
     </div>
 
     <!-- Card 3: Stok Menipis (Threshold Alert) -->
-    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-amber-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between bg-gradient-to-br from-white via-white to-amber-50/25">
+    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-amber-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between bg-linear-to-br from-white via-white to-amber-50/25 anim-fade-in-up anim-delay-150">
       <div class="flex items-center gap-4">
         <!-- Circular Gauge -->
         <div class="relative w-16 h-16 shrink-0 flex items-center justify-center">
           <svg class="w-full h-full gauge-circle" viewBox="0 0 36 36">
             <circle cx="18" cy="18" fill="none" r="14.5" stroke="#fef3c7" stroke-width="3.2"></circle>
-            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#f59e0b" stroke-dasharray="91" stroke-dashoffset="40" stroke-linecap="round" stroke-width="3.2"></circle>
+            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#f59e0b" stroke-dasharray="91" stroke-dashoffset="40" stroke-linecap="round" stroke-width="3.2" class="gauge-animated"></circle>
           </svg>
           <span class="absolute text-xs font-black text-amber-700 font-mono">{{ $lowStockCount }}</span>
         </div>
@@ -291,13 +291,13 @@
     </div>
 
     <!-- Card 4: Stok Habis (Out of Stock Alert) -->
-    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-rose-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between bg-gradient-to-br from-white via-white to-rose-50/25">
+    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-rose-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between bg-linear-to-br from-white via-white to-rose-50/25 anim-fade-in-up anim-delay-200">
       <div class="flex items-center gap-4">
         <!-- Circular Gauge -->
         <div class="relative w-16 h-16 shrink-0 flex items-center justify-center">
           <svg class="w-full h-full gauge-circle" viewBox="0 0 36 36">
             <circle cx="18" cy="18" fill="none" r="14.5" stroke="#ffe4e6" stroke-width="3.2"></circle>
-            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#f43f5e" stroke-dasharray="91" stroke-dashoffset="65" stroke-linecap="round" stroke-width="3.2"></circle>
+            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#f43f5e" stroke-dasharray="91" stroke-dashoffset="65" stroke-linecap="round" stroke-width="3.2" class="gauge-animated"></circle>
           </svg>
           <span class="absolute text-xs font-black text-rose-700 font-mono">{{ $outOfStockCount }}</span>
         </div>
@@ -322,7 +322,7 @@
   </div>
 
   <!-- Executive Filter & Search Console -->
-  <div class="no-print bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-xs space-y-4">
+  <div class="no-print bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-xs space-y-4 anim-fade-in-up anim-delay-250">
     <!-- Quick Filter Segments -->
     <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 pb-3">
       <div class="flex flex-wrap items-center gap-1.5 text-xs">
@@ -440,7 +440,7 @@
   </div>
 
   <!-- Ministry Master Table Card -->
-  <div class="table-container bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden">
+  <div class="table-container bg-white rounded-2xl border border-slate-200/90 shadow-xs overflow-hidden anim-fade-in-up anim-delay-300">
     <!-- Table Sub-header -->
     <div class="px-5 py-4 bg-slate-50/70 border-b border-slate-200 flex flex-wrap items-center justify-between gap-3">
       <div class="flex items-center gap-2">
@@ -523,11 +523,15 @@
               <td class="py-3.5 px-4 text-center whitespace-nowrap">
                 <div class="inline-flex flex-col items-center">
                   <div class="flex items-baseline gap-1 font-mono">
-                    <span class="text-base font-black {{ $item->current_stock <= 0 ? 'text-rose-700' : ($item->current_stock <= $item->minimum_stock ? 'text-amber-700' : 'text-slate-900') }}">
-                      {{ number_format($item->current_stock) }}
+                    <span class="text-sm font-bold {{ $item->current_stock <= 0 ? 'text-rose-700' : ($item->current_stock <= $item->minimum_stock ? 'text-amber-700' : 'text-slate-900') }}">
+                      {{ $item->formatted_stock }}
                     </span>
-                    <span class="text-xs font-semibold text-slate-500">{{ $item->unit }}</span>
                   </div>
+                  @if ($item->has_multi_unit)
+                    <span class="text-[10px] text-blue-600 font-mono font-medium mt-0.5">
+                      1 {{ $item->unit }} = {{ $item->conversion_rate }} {{ $item->effective_small_unit }}
+                    </span>
+                  @endif
                   <!-- Mini Progress Bar -->
                   <div class="w-20 bg-slate-100 h-1.5 rounded-full mt-1 overflow-hidden border border-slate-200/60">
                     <div
@@ -541,11 +545,16 @@
               <!-- Min / Target Stock -->
               <td class="py-3.5 px-4 text-center text-xs whitespace-nowrap">
                 <div class="font-mono text-slate-700">
-                  <span class="font-bold text-amber-700" title="Safety Stock Minimum">{{ $item->minimum_stock }}</span>
+                  <span class="font-bold text-amber-700" title="Safety Stock Minimum">{{ $item->formatted_minimum_stock }}</span>
                   <span class="text-slate-400 mx-1">/</span>
-                  <span class="font-semibold text-slate-600" title="Target Stok">{{ $item->target_stock }}</span>
+                  <span class="font-semibold text-slate-600" title="Target Stok">
+                    @if ($item->has_multi_unit && ($item->target_stock % max(1, $item->conversion_rate) === 0))
+                      {{ intdiv($item->target_stock, max(1, $item->conversion_rate)) }} {{ $item->unit }}
+                    @else
+                      {{ $item->target_stock }} {{ $item->effective_small_unit }}
+                    @endif
+                  </span>
                 </div>
-                <span class="text-[10px] text-slate-400 block">{{ $item->unit }}</span>
               </td>
 
               <!-- Status Ketersediaan (Pill Capsule with pulsing indicator) -->
@@ -594,7 +603,7 @@
                     class="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 border border-transparent hover:border-blue-200 hover:scale-115 active:scale-95 transition-all"
                     title="Lihat Kartu Inventaris ATK"
                   >
-                    <svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                       <path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                     </svg>
@@ -607,7 +616,7 @@
                     class="p-1.5 rounded-lg text-slate-500 hover:text-amber-600 hover:bg-amber-50 border border-transparent hover:border-amber-200 hover:scale-115 active:scale-95 transition-all"
                     title="Ubah Data Barang"
                   >
-                    <svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-4 h-4 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                     </svg>
                   </button>
@@ -633,7 +642,7 @@
                       class="p-1.5 rounded-lg {{ $item->status === 'active' ? 'text-slate-400 hover:text-rose-600 hover:bg-rose-50' : 'text-slate-400 hover:text-emerald-600 hover:bg-emerald-50' }} border border-transparent hover:scale-115 active:scale-95 transition-all"
                       title="{{ $item->status === 'active' ? 'Nonaktifkan Barang' : 'Aktifkan Barang' }}"
                     >
-                      <svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg class="w-4 h-4 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         @if ($item->status === 'active')
                           <path stroke-linecap="round" stroke-linejoin="round" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636"></path>
                         @else
@@ -709,13 +718,13 @@
 <!-- ============================================================== -->
 <!-- MODAL 1: FORMULIR REGISTRASI BARANG ATK BARU                  -->
 <!-- ============================================================== -->
-<div id="modal-add-item" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+<div id="modal-add-item" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-xs items-center justify-center p-4">
   <div class="bg-white rounded-2xl max-w-2xl w-full border border-slate-200 shadow-2xl overflow-hidden animate-scale-in">
     <!-- Header Modal Dinas -->
-    <div class="px-6 py-4.5 bg-[#0b2341] text-white flex items-center justify-between border-b border-amber-400/30">
+    <div class="px-6 py-4 bg-[#0b2341] text-white flex items-center justify-between border-b border-amber-400/30">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-xl bg-white/10 text-amber-400 flex items-center justify-center shrink-0 border border-white/20">
-          <svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"></path>
           </svg>
         </div>
@@ -741,7 +750,7 @@
       <!-- BAGIAN I: IDENTIFIKASI BARANG -->
       <div class="space-y-3">
         <div class="flex items-center gap-2 border-b border-slate-200 pb-1.5">
-          <span class="w-1.5 h-4 rounded-full bg-[#0b2341]"></span>
+          <span class="w-1.5 h-4 rounded-full bg-blue-600"></span>
           <h4 class="font-bold text-xs text-slate-800 uppercase tracking-wider">I. Identitas &amp; Klasifikasi Barang</h4>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -753,7 +762,7 @@
               name="code"
               required
               value="{{ old('code', 'ATK-' . date('Y') . '-' . str_pad(rand(100, 999), 4, '0', STR_PAD_LEFT)) }}"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono bg-slate-50 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] font-semibold"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono bg-slate-50 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-semibold"
             />
           </div>
 
@@ -765,7 +774,7 @@
               name="barcode"
               value="{{ old('barcode') }}"
               placeholder="Contoh: 899123456789"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341]"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
             />
           </div>
 
@@ -778,7 +787,7 @@
               required
               value="{{ old('name') }}"
               placeholder="Contoh: Kertas HVS A4 80gr Sinar Dunia"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] font-medium"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
             />
           </div>
 
@@ -788,7 +797,7 @@
             <select
               name="category_id"
               required
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] text-slate-700 font-medium"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-700 font-medium"
             >
               <option value="">-- Pilih Kategori --</option>
               @foreach ($categories as $cat)
@@ -799,13 +808,13 @@
             </select>
           </div>
 
-          <!-- Satuan -->
+          <!-- Satuan Baku -->
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Satuan Baku <span class="text-rose-600">*</span></label>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Satuan Kemasan Baku <span class="text-rose-600">*</span></label>
             <select
               name="unit_id"
               required
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] text-slate-700 font-medium"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-700 font-medium"
             >
               <option value="">-- Pilih Satuan --</option>
               @foreach ($units as $u)
@@ -814,6 +823,33 @@
                 </option>
               @endforeach
             </select>
+          </div>
+
+          <!-- Satuan Eceran & Konversi Kemasan (Multi-Unit) -->
+          <div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Satuan Eceran / Terkecil</label>
+              <input
+                type="text"
+                name="small_unit"
+                value="{{ old('small_unit', 'Pcs') }}"
+                placeholder="Misal: Pcs, Lembar, Batang..."
+                class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
+              />
+              <span class="text-[10px] text-slate-400 mt-0.5 block">Satuan pengambilan per biji oleh staf</span>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Isi per Kemasan (Rasio Konversi)</label>
+              <input
+                type="number"
+                name="conversion_rate"
+                min="1"
+                value="{{ old('conversion_rate', 1) }}"
+                class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-bold"
+              />
+              <span class="text-[10px] text-slate-400 mt-0.5 block">Misal 12 jika Lusin, 10 jika Pack, 1 jika tunggal</span>
+            </div>
           </div>
         </div>
       </div>
@@ -833,7 +869,7 @@
               name="current_stock"
               min="0"
               value="{{ old('current_stock', 0) }}"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341]"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
             />
           </div>
 
@@ -846,7 +882,7 @@
               required
               min="0"
               value="{{ old('minimum_stock', 10) }}"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] text-amber-700 font-bold"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-amber-700 font-bold"
             />
           </div>
 
@@ -859,7 +895,7 @@
               required
               min="0"
               value="{{ old('target_stock', 50) }}"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] text-blue-700 font-bold"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-blue-700 font-bold"
             />
           </div>
         </div>
@@ -880,7 +916,7 @@
               name="storage_location"
               value="{{ old('storage_location') }}"
               placeholder="Contoh: Gudang ATK - Rak B2"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341]"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
             />
           </div>
 
@@ -889,7 +925,7 @@
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Supplier / Penyedia</label>
             <select
               name="supplier_id"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] text-slate-700 font-medium"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-700 font-medium"
             >
               <option value="">-- Pilih Rekanan (Opsional) --</option>
               @foreach ($suppliers as $sup)
@@ -906,7 +942,7 @@
             <select
               name="status"
               required
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] text-slate-700 font-medium"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-700 font-medium"
             >
               <option value="active" {{ old('status', 'active') === 'active' ? 'selected' : '' }}>Aktif Digunakan (Dapat Didistribusikan)</option>
               <option value="inactive" {{ old('status') === 'inactive' ? 'selected' : '' }}>Nonaktif / Tidak Beredar</option>
@@ -920,7 +956,7 @@
               name="description"
               rows="2"
               placeholder="Spesifikasi merek, ukuran, warna, atau catatan khusus dinas..."
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341]"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
             >{{ old('description') }}</textarea>
           </div>
         </div>
@@ -937,7 +973,7 @@
         </button>
         <button
           type="submit"
-          class="px-5 py-2.5 rounded-xl bg-[#0b2341] hover:bg-[#13335e] text-white font-semibold text-xs border border-amber-400/30 shadow-md shadow-slate-900/10 transition"
+          class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-semibold text-xs shadow-sm shadow-blue-500/20 transition cursor-pointer"
         >
           Simpan Data Inventaris
         </button>
@@ -949,13 +985,13 @@
 <!-- ============================================================== -->
 <!-- MODAL 2: FORMULIR UBAH DATA BARANG ATK                        -->
 <!-- ============================================================== -->
-<div id="modal-edit-item" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+<div id="modal-edit-item" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-xs items-center justify-center p-4">
   <div class="bg-white rounded-2xl max-w-2xl w-full border border-slate-200 shadow-2xl overflow-hidden animate-scale-in">
     <!-- Header Modal Dinas -->
-    <div class="px-6 py-4.5 bg-[#0b2341] text-white flex items-center justify-between border-b border-amber-400/30">
+    <div class="px-6 py-4 bg-[#0b2341] text-white flex items-center justify-between border-b border-amber-400/30">
       <div class="flex items-center gap-3">
         <div class="w-9 h-9 rounded-xl bg-white/10 text-amber-400 flex items-center justify-center shrink-0 border border-white/20">
-          <svg class="w-5 h-5 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="w-5 h-5 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
           </svg>
         </div>
@@ -982,7 +1018,7 @@
       <!-- BAGIAN I -->
       <div class="space-y-3">
         <div class="flex items-center gap-2 border-b border-slate-200 pb-1.5">
-          <span class="w-1.5 h-4 rounded-full bg-[#0b2341]"></span>
+          <span class="w-1.5 h-4 rounded-full bg-blue-600"></span>
           <h4 class="font-bold text-xs text-slate-800 uppercase tracking-wider">I. Identitas &amp; Klasifikasi Barang</h4>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -994,7 +1030,7 @@
               id="edit-code"
               name="code"
               required
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono bg-slate-50 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] font-semibold"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono bg-slate-50 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-semibold"
             />
           </div>
 
@@ -1005,7 +1041,7 @@
               type="text"
               id="edit-barcode"
               name="barcode"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341]"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
             />
           </div>
 
@@ -1017,7 +1053,7 @@
               id="edit-name"
               name="name"
               required
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] font-medium"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
             />
           </div>
 
@@ -1028,7 +1064,7 @@
               id="edit-category-id"
               name="category_id"
               required
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] text-slate-700 font-medium"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-700 font-medium"
             >
               <option value="">-- Pilih Kategori --</option>
               @foreach ($categories as $cat)
@@ -1039,18 +1075,45 @@
 
           <!-- Satuan -->
           <div>
-            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Satuan Baku <span class="text-rose-600">*</span></label>
+            <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Satuan Kemasan Baku <span class="text-rose-600">*</span></label>
             <select
               id="edit-unit-id"
               name="unit_id"
               required
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] text-slate-700 font-medium"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-700 font-medium"
             >
               <option value="">-- Pilih Satuan --</option>
               @foreach ($units as $u)
                 <option value="{{ $u->id }}">{{ $u->name }} ({{ $u->code }})</option>
               @endforeach
             </select>
+          </div>
+
+          <!-- Satuan Eceran & Konversi Kemasan (Multi-Unit) -->
+          <div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Satuan Eceran / Terkecil</label>
+              <input
+                type="text"
+                id="edit-small-unit"
+                name="small_unit"
+                placeholder="Misal: Pcs, Lembar, Batang..."
+                class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
+              />
+              <span class="text-[10px] text-slate-400 mt-0.5 block">Satuan pengambilan per biji oleh staf</span>
+            </div>
+
+            <div>
+              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Isi per Kemasan (Rasio Konversi)</label>
+              <input
+                type="number"
+                id="edit-conversion-rate"
+                name="conversion_rate"
+                min="1"
+                class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-bold"
+              />
+              <span class="text-[10px] text-slate-400 mt-0.5 block">Misal 12 jika Lusin, 10 jika Pack, 1 jika tunggal</span>
+            </div>
           </div>
         </div>
       </div>
@@ -1071,7 +1134,7 @@
               name="minimum_stock"
               required
               min="0"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] text-amber-700 font-bold"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-amber-700 font-bold"
             />
           </div>
 
@@ -1084,7 +1147,7 @@
               name="target_stock"
               required
               min="0"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] text-blue-700 font-bold"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-blue-700 font-bold"
             />
           </div>
         </div>
@@ -1104,7 +1167,7 @@
               type="text"
               id="edit-storage-location"
               name="storage_location"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341]"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
             />
           </div>
 
@@ -1114,7 +1177,7 @@
             <select
               id="edit-supplier-id"
               name="supplier_id"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] text-slate-700 font-medium"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-700 font-medium"
             >
               <option value="">-- Pilih Rekanan (Opsional) --</option>
               @foreach ($suppliers as $sup)
@@ -1130,7 +1193,7 @@
               id="edit-status"
               name="status"
               required
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] text-slate-700 font-medium"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-700 font-medium"
             >
               <option value="active">Aktif Digunakan (Dapat Didistribusikan)</option>
               <option value="inactive">Nonaktif / Tidak Beredar</option>
@@ -1144,7 +1207,7 @@
               id="edit-description"
               name="description"
               rows="2"
-              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341]"
+              class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600"
             ></textarea>
           </div>
         </div>
@@ -1161,7 +1224,7 @@
         </button>
         <button
           type="submit"
-          class="px-5 py-2.5 rounded-xl bg-[#0b2341] hover:bg-[#13335e] text-white font-semibold text-xs border border-amber-400/30 shadow-md shadow-slate-900/10 transition"
+          class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-[0.98] text-white font-semibold text-xs shadow-sm shadow-blue-500/20 transition cursor-pointer"
         >
           Perbarui Data Inventaris
         </button>
@@ -1173,7 +1236,7 @@
 <!-- ============================================================== -->
 <!-- MODAL 3: KARTU INVENTARIS BARANG ATK (DETAIL VIEW)            -->
 <!-- ============================================================== -->
-<div id="modal-detail-item" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+<div id="modal-detail-item" class="fixed inset-0 z-50 hidden overflow-y-auto bg-slate-900/60 backdrop-blur-xs items-center justify-center p-4">
   <div class="bg-white rounded-2xl max-w-xl w-full border border-slate-200 shadow-2xl overflow-hidden animate-scale-in">
     <!-- Header Kartu Inventaris -->
     <div class="px-6 py-4 bg-[#0b2341] text-white flex items-center justify-between border-b border-amber-400/30">
@@ -1272,6 +1335,7 @@
     const el = document.getElementById(id);
     if (el) {
       el.classList.remove('hidden');
+      el.classList.add('flex', 'anim-fade-in');
       document.body.classList.add('overflow-hidden');
     }
   }
@@ -1280,6 +1344,7 @@
     const el = document.getElementById(id);
     if (el) {
       el.classList.add('hidden');
+      el.classList.remove('flex', 'anim-fade-in');
       document.body.classList.remove('overflow-hidden');
     }
   }
@@ -1299,6 +1364,8 @@
     document.getElementById('edit-supplier-id').value = item.supplier_id || '';
     document.getElementById('edit-status').value = item.status || 'active';
     document.getElementById('edit-description').value = item.description || '';
+    document.getElementById('edit-small-unit').value = item.small_unit || '';
+    document.getElementById('edit-conversion-rate').value = item.conversion_rate || 1;
 
     openModal('modal-edit-item');
   }
@@ -1307,9 +1374,11 @@
     document.getElementById('detail-code').textContent = item.code || 'ATK-????';
     document.getElementById('detail-name').textContent = item.name || '-';
     document.getElementById('detail-category').textContent = `Kategori: ${item.category?.name || 'Umum'}`;
-    document.getElementById('detail-current-stock').textContent = item.current_stock ?? 0;
-    document.getElementById('detail-unit').textContent = item.unit || 'Pcs';
-    document.getElementById('detail-min-target').textContent = `${item.minimum_stock ?? 0} / ${item.target_stock ?? 0} ${item.unit || ''}`;
+    document.getElementById('detail-current-stock').textContent = item.formatted_stock || (item.current_stock ?? 0);
+    document.getElementById('detail-unit').textContent = (item.conversion_rate > 1) 
+      ? `(1 ${item.unit} = ${item.conversion_rate} ${item.small_unit || 'Pcs'})` 
+      : (item.unit || 'Pcs');
+    document.getElementById('detail-min-target').textContent = `${item.formatted_minimum_stock || item.minimum_stock} / ${item.target_stock ?? 0} ${item.unit || ''}`;
     document.getElementById('detail-location').textContent = item.storage_location || 'Gudang Utama';
     document.getElementById('detail-supplier').textContent = item.supplier?.name || '-';
     document.getElementById('detail-barcode').textContent = item.barcode || 'Tidak Ada Barcode';

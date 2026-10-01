@@ -86,6 +86,8 @@ class ItemController extends Controller
             'name' => ['required', 'string', 'max:200'],
             'category_id' => ['required', 'exists:categories,id'],
             'unit_id' => ['required', 'exists:units,id'],
+            'small_unit' => ['nullable', 'string', 'max:50'],
+            'conversion_rate' => ['nullable', 'integer', 'min:1'],
             'minimum_stock' => ['required', 'integer', 'min:0'],
             'target_stock' => ['required', 'integer', 'min:0'],
             'current_stock' => ['nullable', 'integer', 'min:0'],
@@ -102,6 +104,8 @@ class ItemController extends Controller
 
         $unit = Unit::find($validated['unit_id']);
         $validated['unit'] = $unit?->name ?? 'Pcs';
+        $validated['small_unit'] = !empty($validated['small_unit']) ? $validated['small_unit'] : ($unit?->name ?? 'Pcs');
+        $validated['conversion_rate'] = max(1, (int) ($validated['conversion_rate'] ?? 1));
         $validated['current_stock'] = $validated['current_stock'] ?? 0;
 
         Item::create($validated);
@@ -120,6 +124,8 @@ class ItemController extends Controller
             'name' => ['required', 'string', 'max:200'],
             'category_id' => ['required', 'exists:categories,id'],
             'unit_id' => ['required', 'exists:units,id'],
+            'small_unit' => ['nullable', 'string', 'max:50'],
+            'conversion_rate' => ['nullable', 'integer', 'min:1'],
             'minimum_stock' => ['required', 'integer', 'min:0'],
             'target_stock' => ['required', 'integer', 'min:0'],
             'storage_location' => ['nullable', 'string', 'max:150'],
@@ -133,6 +139,8 @@ class ItemController extends Controller
 
         $unit = Unit::find($validated['unit_id']);
         $validated['unit'] = $unit?->name ?? $item->unit;
+        $validated['small_unit'] = !empty($validated['small_unit']) ? $validated['small_unit'] : ($item->small_unit ?: ($unit?->name ?? 'Pcs'));
+        $validated['conversion_rate'] = max(1, (int) ($validated['conversion_rate'] ?? 1));
 
         $item->update($validated);
 

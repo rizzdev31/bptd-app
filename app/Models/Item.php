@@ -18,6 +18,8 @@ class Item extends Model
         'category_id',
         'unit_id',
         'unit',
+        'small_unit',
+        'conversion_rate',
         'minimum_stock',
         'target_stock',
         'current_stock',
@@ -28,6 +30,7 @@ class Item extends Model
     ];
 
     protected $casts = [
+        'conversion_rate' => 'integer',
         'minimum_stock' => 'integer',
         'target_stock' => 'integer',
         'current_stock' => 'integer',
@@ -37,6 +40,10 @@ class Item extends Model
         'stock_status',
         'stock_status_label',
         'stock_percentage',
+        'effective_small_unit',
+        'formatted_stock',
+        'formatted_minimum_stock',
+        'has_multi_unit',
     ];
 
     /**
@@ -98,6 +105,80 @@ class Item extends Model
     }
 
     /**
+     * Satuan eceran / terkecil efektif (default ke Pcs atau unit)
+     */
+    public function getEffectiveSmallUnitAttribute(): string
+    {
+        return $this->small_unit ?: ($this->unit ?: 'Pcs');
+    }
+
+    /**
+     * Cek apakah barang memiliki satuan bertingkat (misal Lusin -> Pcs, Box -> Pcs, Pack -> Pcs)
+     */
+    public function getHasMultiUnitAttribute(): bool
+    {
+        return (int) $this->conversion_rate > 1 && 
+               strcasecmp($this->unit ?? '', $this->effective_small_unit) !== 0;
+    }
+
+    /**
+     * Format tampilan stok ramah pengguna:
+     * E.g. 36 Pcs (1 Lusin = 12) -> "3 Lusin (36 Pcs)"
+     * E.g. 34 Pcs (1 Lusin = 12) -> "2 Lusin 10 Pcs"
+     * E.g. 5 Pcs (1 Lusin = 12) -> "5 Pcs"
+     */
+    public function getFormattedStockAttribute(): string
+    {
+        if ($this->current_stock <= 0) {
+            return '0 ' . ($this->unit ?: 'Pcs');
+        }
+
+        $rate = max(1, (int) $this->conversion_rate);
+        $small = $this->effective_small_unit;
+        $pkgUnit = $this->unit ?: 'Pcs';
+
+        if (!$this->has_multi_unit) {
+            return number_format($this->current_stock, 0, ',', '.') . ' ' . $pkgUnit;
+        }
+
+        $wholePkg = intdiv($this->current_stock, $rate);
+        $rem = $this->current_stock % $rate;
+
+        if ($wholePkg > 0 && $rem > 0) {
+            return "{$wholePkg} {$pkgUnit} {$rem} {$small}";
+        }
+
+        if ($wholePkg > 0 && $rem === 0) {
+            return "{$wholePkg} {$pkgUnit} (" . number_format($this->current_stock, 0, ',', '.') . " {$small})";
+        }
+
+        return "{$rem} {$small} (Eceran)";
+    }
+
+    /**
+     * Format stok minimum
+     */
+    public function getFormattedMinimumStockAttribute(): string
+    {
+        $rate = max(1, (int) $this->conversion_rate);
+        $pkgUnit = $this->unit ?: 'Pcs';
+        $small = $this->effective_small_unit;
+
+        if (!$this->has_multi_unit) {
+            return $this->minimum_stock . ' ' . $pkgUnit;
+        }
+
+        $wholePkg = intdiv($this->minimum_stock, $rate);
+        $rem = $this->minimum_stock % $rate;
+
+        if ($rem === 0 && $wholePkg > 0) {
+            return "{$wholePkg} {$pkgUnit}";
+        }
+
+        return "{$this->minimum_stock} {$small}";
+    }
+
+    /**
      * Scopes
      */
     public function scopeActive($query)
@@ -119,5 +200,15 @@ class Item extends Model
     public function scopeOutOfStock($query)
     {
         return $query->where('current_stock', '<=', 0);
+    }
+
+    public function stockOutDetails(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(StockOutDetail::class, 'item_id');
+    }
+
+    public function stockLedgers(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(StockLedger::class, 'item_id');
     }
 }
