@@ -2,6 +2,18 @@
 
 @section('title', 'Master Pegawai - BPTD Kelas II Jawa Timur')
 
+@push('styles')
+<style>
+  .dash-interactive-card {
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease;
+  }
+  .dash-interactive-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px -6px rgba(11, 35, 65, 0.08), 0 4px 8px -2px rgba(11, 35, 65, 0.04);
+  }
+</style>
+@endpush
+
 @section('content')
 <main class="flex-1 max-w-430 w-full mx-auto px-4 sm:px-6 lg:px-8 py-7 space-y-7">
   <!-- Header Section -->
@@ -22,25 +34,25 @@
       </p>
     </div>
 
-    <!-- Add Button Trigger -->
+    <!-- Add Button Trigger (Ministry Navy & Gold Palette - Harmonized with Master ATK) -->
     <div class="flex items-center gap-3">
       <button
         type="button"
         onclick="openCreateModal()"
-        class="inline-flex items-center gap-2 px-5 py-2.5 bg-[#007BFB] hover:bg-[#006CE0] active:scale-95 text-white font-semibold text-sm rounded-xl shadow-btn transition-all cursor-pointer"
+        class="inline-flex items-center justify-center gap-2 h-11 px-4.5 rounded-xl bg-[#0b2341] hover:bg-[#13335e] active:scale-[0.98] text-white font-semibold text-xs sm:text-sm border border-amber-400/30 shadow-sm shadow-[#0b2341]/20 transition-all hover:brightness-105 cursor-pointer"
       >
-        <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="w-4 h-4 text-amber-400 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15"/>
         </svg>
-        <span>Tambah Pegawai</span>
+        <span>Tambah Pegawai Baru</span>
       </button>
     </div>
   </div>
 
-  <!-- 4 Summary Metric Cards (Matching Dashboard Aesthetics) -->
+  <!-- 4 Summary Metric Cards (Matching Dashboard Aesthetics & Interactive Elevation) -->
   <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
     <!-- Card 1: Total Pegawai -->
-    <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4 hover:shadow-md transition">
+    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4 hover:shadow-md transition">
       <div class="w-12 h-12 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
         <svg class="w-6 h-6 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"/>
@@ -54,7 +66,7 @@
     </div>
 
     <!-- Card 2: Pegawai Aktif -->
-    <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4 hover:shadow-md transition">
+    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4 hover:shadow-md transition">
       <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
         <svg class="w-6 h-6 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
@@ -68,7 +80,7 @@
     </div>
 
     <!-- Card 3: Akun Pengelola Sistem -->
-    <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4 hover:shadow-md transition">
+    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4 hover:shadow-md transition">
       <div class="w-12 h-12 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
         <svg class="w-6 h-6 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
@@ -82,7 +94,7 @@
     </div>
 
     <!-- Card 4: Unit Kerja -->
-    <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4 hover:shadow-md transition">
+    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm flex items-center gap-4 hover:shadow-md transition">
       <div class="w-12 h-12 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center shrink-0">
         <svg class="w-6 h-6 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
@@ -170,19 +182,19 @@
     <div class="overflow-x-auto">
       <table class="w-full text-left border-collapse">
         <thead>
-          <tr class="bg-slate-50/75 border-b border-slate-200 text-[11px] font-bold uppercase tracking-wider text-slate-500 select-none">
-            <th class="py-3.5 px-4 sm:px-6 w-14 text-center">No</th>
-            <th class="py-3.5 px-4 sm:px-6">Identitas Pegawai</th>
-            <th class="py-3.5 px-4 sm:px-6">Unit Kerja</th>
-            <th class="py-3.5 px-4 sm:px-6">Jabatan</th>
-            <th class="py-3.5 px-4 sm:px-6 text-center">Peran Sistem</th>
-            <th class="py-3.5 px-4 sm:px-6 text-center">Status</th>
-            <th class="py-3.5 px-4 sm:px-6 text-center w-28">Aksi</th>
+          <tr class="bg-slate-50/80 border-b border-slate-200/90 text-xs font-bold uppercase tracking-wider text-slate-800 select-none">
+            <th class="py-4 px-4 sm:px-6 w-14 text-center text-slate-500 font-bold">No</th>
+            <th class="py-4 px-4 sm:px-6 font-bold text-slate-800">Identitas Pegawai</th>
+            <th class="py-4 px-4 sm:px-6 font-bold text-slate-800">Unit Kerja</th>
+            <th class="py-4 px-4 sm:px-6 font-bold text-slate-800">Jabatan</th>
+            <th class="py-4 px-4 sm:px-6 text-center font-bold text-slate-800">Peran Sistem</th>
+            <th class="py-4 px-4 sm:px-6 text-center font-bold text-slate-800">Status</th>
+            <th class="py-4 px-4 sm:px-6 text-center w-28 font-bold text-slate-800">Aksi</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 text-xs sm:text-sm">
           @forelse ($employees as $index => $emp)
-            <tr class="hover:bg-slate-50/80 transition-colors">
+            <tr class="hover:bg-blue-50/40 transition-colors duration-150">
               <!-- No -->
               <td class="py-4 px-4 sm:px-6 text-center font-mono text-xs text-slate-400">
                 {{ $employees->firstItem() + $index }}
@@ -191,7 +203,7 @@
               <!-- Identitas Pegawai -->
               <td class="py-4 px-4 sm:px-6">
                 <div class="flex items-center gap-3">
-                  <div class="w-9 h-9 rounded-full bg-blue-100 text-[#007BFB] flex items-center justify-center font-bold text-xs shrink-0 select-none">
+                  <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs shrink-0 select-none">
                     {{ strtoupper(substr($emp->name, 0, 2)) }}
                   </div>
                   <div>
@@ -224,17 +236,17 @@
               <td class="py-4 px-4 sm:px-6 text-center">
                 @if ($emp->user && $emp->user->role)
                   @if ($emp->user->role->name === 'superadmin')
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200 shadow-pill">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200">
                       <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span>
                       Superadmin
                     </span>
                   @elseif ($emp->user->role->name === 'petugas')
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200 shadow-pill">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200">
                       <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
                       Petugas ATK
                     </span>
                   @else
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200 shadow-pill">
+                    <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-purple-50 text-purple-700 border border-purple-200">
                       {{ $emp->user->role->label }}
                     </span>
                   @endif
@@ -246,13 +258,16 @@
               <!-- Status -->
               <td class="py-4 px-4 sm:px-6 text-center">
                 @if ($emp->status === 'active')
-                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span class="relative flex h-1.5 w-1.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                    </span>
                     Aktif
                   </span>
                 @else
-                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
-                    <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span>
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+                    <span class="h-1.5 w-1.5 rounded-full bg-slate-400"></span>
                     Nonaktif
                   </span>
                 @endif
@@ -265,7 +280,7 @@
                   <button
                     type="button"
                     onclick='openEditModal(@json($emp))'
-                    class="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 transition"
+                    class="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 hover:scale-115 active:scale-95 transition-all"
                     title="Ubah Data Pegawai"
                   >
                     <svg class="w-4 h-4 stroke-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -290,7 +305,7 @@
                     @method('DELETE')
                     <button
                       type="submit"
-                      class="p-1.5 rounded-lg {{ $emp->status === 'active' ? 'text-slate-500 hover:text-red-600 hover:bg-red-50' : 'text-slate-500 hover:text-emerald-600 hover:bg-emerald-50' }} transition"
+                      class="p-1.5 rounded-lg {{ $emp->status === 'active' ? 'text-slate-500 hover:text-rose-600 hover:bg-rose-50' : 'text-slate-500 hover:text-emerald-600 hover:bg-emerald-50' }} hover:scale-115 active:scale-95 transition-all"
                       title="{{ $emp->status === 'active' ? 'Nonaktifkan Pegawai' : 'Aktifkan Pegawai' }}"
                     >
                       @if ($emp->status === 'active')

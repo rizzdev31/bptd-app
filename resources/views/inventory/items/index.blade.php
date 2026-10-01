@@ -63,6 +63,13 @@
   .gauge-circle {
     transform: rotate(-90deg);
   }
+  .dash-interactive-card {
+    transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.28s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.28s ease;
+  }
+  .dash-interactive-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 24px -6px rgba(11, 35, 65, 0.08), 0 4px 8px -2px rgba(11, 35, 65, 0.04);
+  }
 </style>
 @endpush
 
@@ -193,20 +200,20 @@
   <div class="no-print grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
 
     <!-- Card 1: Total Varian ATK -->
-    <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between">
+    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between">
       <div class="flex items-center gap-4">
         <!-- Circular Gauge -->
         <div class="relative w-16 h-16 shrink-0 flex items-center justify-center">
           <svg class="w-full h-full gauge-circle" viewBox="0 0 36 36">
-            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#f1f5f9" stroke-width="3.2"></circle>
-            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#0b2341" stroke-dasharray="91" stroke-dashoffset="15" stroke-linecap="round" stroke-width="3.2"></circle>
+            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#e0e7ff" stroke-width="3.2"></circle>
+            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#2563eb" stroke-dasharray="91" stroke-dashoffset="15" stroke-linecap="round" stroke-width="3.2"></circle>
           </svg>
           <span class="absolute text-xs font-black text-slate-900 font-mono">{{ $totalItems }}</span>
         </div>
         <!-- Card Details -->
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-[#0b2341]"></span>
+            <span class="w-2 h-2 rounded-full bg-blue-600"></span>
             <p class="text-xs font-bold text-slate-700 uppercase tracking-wider">Total Katalog</p>
           </div>
           <h3 class="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">{{ number_format($totalItems) }}</h3>
@@ -215,20 +222,20 @@
       </div>
       <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-600 font-medium">
         <span>Klasifikasi:</span>
-        <span class="font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200/60">
+        <span class="font-bold text-blue-700 bg-blue-50 px-2.5 py-0.5 rounded-full border border-blue-200/60">
           {{ $categories->count() }} Kategori Aktif
         </span>
       </div>
     </div>
 
     <!-- Card 2: Total Fisik Unit Terakumulasi -->
-    <div class="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between">
+    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-slate-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between">
       <div class="flex items-center gap-4">
         <!-- Circular Gauge -->
         <div class="relative w-16 h-16 shrink-0 flex items-center justify-center">
           <svg class="w-full h-full gauge-circle" viewBox="0 0 36 36">
             <circle cx="18" cy="18" fill="none" r="14.5" stroke="#f1f5f9" stroke-width="3.2"></circle>
-            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#059669" stroke-dasharray="91" stroke-dashoffset="25" stroke-linecap="round" stroke-width="3.2"></circle>
+            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#10b981" stroke-dasharray="91" stroke-dashoffset="25" stroke-linecap="round" stroke-width="3.2"></circle>
           </svg>
           <div class="absolute w-7 h-7 rounded-full bg-emerald-50 text-emerald-700 flex items-center justify-center">
             <svg class="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -239,7 +246,7 @@
         <!-- Card Details -->
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-emerald-600"></span>
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
             <p class="text-xs font-bold text-slate-700 uppercase tracking-wider">Total Fisik Unit</p>
           </div>
           <h3 class="text-2xl font-black text-slate-900 mt-0.5 tracking-tight">{{ number_format($totalPhysicalStock) }}</h3>
@@ -248,20 +255,20 @@
       </div>
       <div class="mt-3.5 pt-3 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-600 font-medium">
         <span>Kondisi Fisik:</span>
-        <span class="font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200/60">
+        <span class="font-bold text-emerald-700 bg-emerald-50 px-2.5 py-0.5 rounded-full border border-emerald-200/60">
           Stok Siap Distribusi
         </span>
       </div>
     </div>
 
     <!-- Card 3: Stok Menipis (Threshold Alert) -->
-    <div class="bg-white rounded-2xl p-5 border border-amber-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between bg-gradient-to-br from-white via-white to-amber-50/30">
+    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-amber-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between bg-gradient-to-br from-white via-white to-amber-50/25">
       <div class="flex items-center gap-4">
         <!-- Circular Gauge -->
         <div class="relative w-16 h-16 shrink-0 flex items-center justify-center">
           <svg class="w-full h-full gauge-circle" viewBox="0 0 36 36">
             <circle cx="18" cy="18" fill="none" r="14.5" stroke="#fef3c7" stroke-width="3.2"></circle>
-            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#d97706" stroke-dasharray="91" stroke-dashoffset="40" stroke-linecap="round" stroke-width="3.2"></circle>
+            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#f59e0b" stroke-dasharray="91" stroke-dashoffset="40" stroke-linecap="round" stroke-width="3.2"></circle>
           </svg>
           <span class="absolute text-xs font-black text-amber-700 font-mono">{{ $lowStockCount }}</span>
         </div>
@@ -284,20 +291,20 @@
     </div>
 
     <!-- Card 4: Stok Habis (Out of Stock Alert) -->
-    <div class="bg-white rounded-2xl p-5 border border-rose-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between bg-gradient-to-br from-white via-white to-rose-50/30">
+    <div class="dash-interactive-card bg-white rounded-2xl p-5 border border-rose-200/90 shadow-xs hover:shadow-md transition flex flex-col justify-between bg-gradient-to-br from-white via-white to-rose-50/25">
       <div class="flex items-center gap-4">
         <!-- Circular Gauge -->
         <div class="relative w-16 h-16 shrink-0 flex items-center justify-center">
           <svg class="w-full h-full gauge-circle" viewBox="0 0 36 36">
             <circle cx="18" cy="18" fill="none" r="14.5" stroke="#ffe4e6" stroke-width="3.2"></circle>
-            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#e11d48" stroke-dasharray="91" stroke-dashoffset="65" stroke-linecap="round" stroke-width="3.2"></circle>
+            <circle cx="18" cy="18" fill="none" r="14.5" stroke="#f43f5e" stroke-dasharray="91" stroke-dashoffset="65" stroke-linecap="round" stroke-width="3.2"></circle>
           </svg>
           <span class="absolute text-xs font-black text-rose-700 font-mono">{{ $outOfStockCount }}</span>
         </div>
         <!-- Card Details -->
         <div class="flex-1 min-w-0">
           <div class="flex items-center gap-1.5">
-            <span class="w-2 h-2 rounded-full bg-rose-600"></span>
+            <span class="w-2 h-2 rounded-full bg-rose-500"></span>
             <p class="text-xs font-bold text-rose-700 uppercase tracking-wider">Stok Habis</p>
           </div>
           <h3 class="text-2xl font-black text-rose-700 mt-0.5 tracking-tight">{{ number_format($outOfStockCount) }}</h3>
@@ -324,7 +331,7 @@
         <!-- Segment: Semua -->
         <a
           href="{{ route('inventory.items.index', request()->except(['stock_status', 'page'])) }}"
-          class="px-3 py-1.5 rounded-lg font-semibold text-xs transition {{ !request()->filled('stock_status') ? 'bg-[#0b2341] text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}"
+          class="px-3 py-1.5 rounded-lg font-semibold text-xs transition {{ !request()->filled('stock_status') ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-100 text-slate-600 hover:bg-slate-200' }}"
         >
           Semua Item ({{ $totalItems }})
         </a>
@@ -380,7 +387,7 @@
           name="keyword"
           value="{{ request('keyword') }}"
           placeholder="Cari Kode Barang (ATK-...), Barcode, atau Nama..."
-          class="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-slate-50/50 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] transition font-medium"
+          class="w-full pl-10 pr-4 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-slate-50/50 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition font-medium"
         />
       </div>
 
@@ -388,7 +395,7 @@
       <div class="lg:col-span-3">
         <select
           name="category_id"
-          class="w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-slate-50/50 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] transition font-medium text-slate-700"
+          class="w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-slate-50/50 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition font-medium text-slate-700"
         >
           <option value="">-- Semua Kategori ATK --</option>
           @foreach ($categories as $cat)
@@ -403,7 +410,7 @@
       <div class="lg:col-span-2">
         <select
           name="status"
-          class="w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-slate-50/50 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-[#0b2341] transition font-medium text-slate-700"
+          class="w-full px-3 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-slate-50/50 focus:bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 transition font-medium text-slate-700"
         >
           <option value="">-- Status Item --</option>
           <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Aktif Beredar</option>
@@ -415,7 +422,7 @@
       <div class="lg:col-span-2 flex items-center gap-2">
         <button
           type="submit"
-          class="flex-1 py-2.5 px-4 rounded-xl bg-[#0b2341] hover:bg-[#13335e] text-white font-semibold text-xs tracking-wider uppercase transition text-center shadow-xs"
+          class="flex-1 py-2.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-semibold text-xs tracking-wider uppercase transition text-center shadow-xs"
         >
           Terapkan
         </button>
@@ -451,22 +458,22 @@
     <!-- Table Element -->
     <div class="overflow-x-auto">
       <table class="w-full text-left text-xs sm:text-sm">
-        <thead class="bg-[#0b2341] text-white uppercase tracking-wider text-[11px] font-bold border-b border-slate-200 select-none">
+        <thead class="bg-slate-50/80 text-slate-800 font-bold border-b border-slate-200/90 text-xs uppercase tracking-wider select-none">
           <tr>
-            <th class="py-3.5 px-4 w-12 text-center text-slate-300">No</th>
-            <th class="py-3.5 px-4">Kode &amp; Barcode</th>
-            <th class="py-3.5 px-4">Nama Barang &amp; Spesifikasi</th>
-            <th class="py-3.5 px-4">Kategori</th>
-            <th class="py-3.5 px-4 text-center">Stok Fisik</th>
-            <th class="py-3.5 px-4 text-center">Safety Stock (Min/Max)</th>
-            <th class="py-3.5 px-4 text-center">Status Ketersediaan</th>
-            <th class="py-3.5 px-4">Lokasi Gudang</th>
-            <th class="py-3.5 px-4 text-center no-print">Tindakan</th>
+            <th class="py-4 px-4 w-12 text-center text-slate-500 font-bold">No</th>
+            <th class="py-4 px-4 font-bold text-slate-800">Kode &amp; Barcode</th>
+            <th class="py-4 px-4 font-bold text-slate-800">Nama Barang &amp; Spesifikasi</th>
+            <th class="py-4 px-4 font-bold text-slate-800">Kategori</th>
+            <th class="py-4 px-4 text-center font-bold text-slate-800">Stok Fisik</th>
+            <th class="py-4 px-4 text-center font-bold text-slate-800">Safety Stock (Min/Max)</th>
+            <th class="py-4 px-4 text-center font-bold text-slate-800">Status Ketersediaan</th>
+            <th class="py-4 px-4 font-bold text-slate-800">Lokasi Gudang</th>
+            <th class="py-4 px-4 text-center no-print font-bold text-slate-800">Tindakan</th>
           </tr>
         </thead>
         <tbody class="divide-y divide-slate-100 text-slate-700">
           @forelse ($items as $index => $item)
-            <tr class="hover:bg-slate-50/80 transition duration-150 {{ $item->status === 'inactive' ? 'bg-slate-50/40 opacity-70' : '' }}">
+            <tr class="hover:bg-blue-50/40 transition-colors duration-150 {{ $item->status === 'inactive' ? 'bg-slate-50/40 opacity-70' : '' }}">
               <!-- Number -->
               <td class="py-3.5 px-4 text-center font-mono text-xs text-slate-500">
                 {{ $items->firstItem() + $index }}
@@ -475,8 +482,8 @@
               <!-- Kode ATK & Barcode -->
               <td class="py-3.5 px-4 whitespace-nowrap">
                 <div class="space-y-1">
-                  <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-slate-100 text-slate-900 border border-slate-200 font-mono text-[11px] font-bold">
-                    <svg class="w-3 h-3 text-blue-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md bg-blue-50 text-blue-700 border border-blue-200/60 font-mono text-[11px] font-bold">
+                    <svg class="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 20l4-16m2 16l4-16M6 9h14M4 15h14"></path>
                     </svg>
                     <span>{{ $item->code }}</span>
@@ -493,7 +500,7 @@
               <!-- Nama Barang -->
               <td class="py-3.5 px-4">
                 <div class="space-y-0.5">
-                  <div class="font-bold text-slate-900 text-sm hover:text-blue-700 transition">
+                  <div class="font-bold text-slate-900 text-sm hover:text-blue-600 transition">
                     {{ $item->name }}
                   </div>
                   @if ($item->description)
@@ -507,7 +514,7 @@
 
               <!-- Kategori -->
               <td class="py-3.5 px-4 whitespace-nowrap">
-                <span class="inline-flex items-center px-2.5 py-1 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
+                <span class="inline-flex items-center px-2.5 py-0.5 rounded-md text-[11px] font-semibold bg-slate-100 text-slate-700 border border-slate-200">
                   {{ $item->category?->name ?? 'Umum' }}
                 </span>
               </td>
@@ -524,7 +531,7 @@
                   <!-- Mini Progress Bar -->
                   <div class="w-20 bg-slate-100 h-1.5 rounded-full mt-1 overflow-hidden border border-slate-200/60">
                     <div
-                      class="h-full rounded-full transition-all {{ $item->current_stock <= 0 ? 'bg-rose-600' : ($item->current_stock <= $item->minimum_stock ? 'bg-amber-500' : 'bg-blue-600') }}"
+                      class="h-full rounded-full transition-all {{ $item->current_stock <= 0 ? 'bg-rose-500' : ($item->current_stock <= $item->minimum_stock ? 'bg-amber-500' : 'bg-blue-600') }}"
                       style="width: {{ $item->stock_percentage }}%"
                     ></div>
                   </div>
@@ -541,21 +548,27 @@
                 <span class="text-[10px] text-slate-400 block">{{ $item->unit }}</span>
               </td>
 
-              <!-- Status Ketersediaan (Pill Capsule) -->
+              <!-- Status Ketersediaan (Pill Capsule with pulsing indicator) -->
               <td class="py-3.5 px-4 text-center whitespace-nowrap">
                 @if ($item->stock_status === 'available')
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-emerald-50 text-emerald-800 border border-emerald-300">
-                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span>
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+                    <span class="relative flex h-1.5 w-1.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500"></span>
+                    </span>
                     Tersedia
                   </span>
                 @elseif ($item->stock_status === 'low_stock')
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-amber-50 text-amber-800 border border-amber-300">
-                    <span class="w-1.5 h-1.5 rounded-full bg-amber-600 animate-pulse"></span>
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-amber-50 text-amber-700 border border-amber-200">
+                    <span class="relative flex h-1.5 w-1.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-amber-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-1.5 w-1.5 bg-amber-500"></span>
+                    </span>
                     Menipis
                   </span>
                 @else
-                  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[11px] font-bold bg-rose-50 text-rose-800 border border-rose-300">
-                    <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span>
+                  <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-semibold bg-rose-50 text-rose-700 border border-rose-200">
+                    <span class="h-1.5 w-1.5 rounded-full bg-rose-500"></span>
                     Habis
                   </span>
                 @endif
@@ -578,7 +591,7 @@
                   <button
                     type="button"
                     onclick="openDetailModal({{ json_encode($item) }})"
-                    class="p-1.5 rounded-lg text-slate-600 hover:text-blue-700 hover:bg-blue-50 border border-transparent hover:border-blue-200 transition"
+                    class="p-1.5 rounded-lg text-slate-500 hover:text-blue-600 hover:bg-blue-50 border border-transparent hover:border-blue-200 hover:scale-115 active:scale-95 transition-all"
                     title="Lihat Kartu Inventaris ATK"
                   >
                     <svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -591,7 +604,7 @@
                   <button
                     type="button"
                     onclick="openEditModal({{ json_encode($item) }})"
-                    class="p-1.5 rounded-lg text-slate-600 hover:text-amber-700 hover:bg-amber-50 border border-transparent hover:border-amber-200 transition"
+                    class="p-1.5 rounded-lg text-slate-500 hover:text-amber-600 hover:bg-amber-50 border border-transparent hover:border-amber-200 hover:scale-115 active:scale-95 transition-all"
                     title="Ubah Data Barang"
                   >
                     <svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -617,7 +630,7 @@
                     @method('DELETE')
                     <button
                       type="submit"
-                      class="p-1.5 rounded-lg {{ $item->status === 'active' ? 'text-slate-400 hover:text-rose-700 hover:bg-rose-50' : 'text-slate-400 hover:text-emerald-700 hover:bg-emerald-50' }} border border-transparent transition"
+                      class="p-1.5 rounded-lg {{ $item->status === 'active' ? 'text-slate-400 hover:text-rose-600 hover:bg-rose-50' : 'text-slate-400 hover:text-emerald-600 hover:bg-emerald-50' }} border border-transparent hover:scale-115 active:scale-95 transition-all"
                       title="{{ $item->status === 'active' ? 'Nonaktifkan Barang' : 'Aktifkan Barang' }}"
                     >
                       <svg class="w-4 h-4 stroke-[2]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
