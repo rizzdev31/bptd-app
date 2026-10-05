@@ -548,8 +548,8 @@
                   <span class="font-bold text-amber-700" title="Safety Stock Minimum">{{ $item->formatted_minimum_stock }}</span>
                   <span class="text-slate-400 mx-1">/</span>
                   <span class="font-semibold text-slate-600" title="Target Stok">
-                    @if ($item->has_multi_unit && ($item->target_stock % max(1, $item->conversion_rate) === 0))
-                      {{ intdiv($item->target_stock, max(1, $item->conversion_rate)) }} {{ $item->unit }}
+                    @if ($item->has_multi_unit && (((int) ($item->target_stock ?? 0)) % max(1, (int) $item->conversion_rate) === 0))
+                      {{ intdiv((int) ($item->target_stock ?? 0), max(1, (int) $item->conversion_rate)) }} {{ $item->unit }}
                     @else
                       {{ $item->target_stock }} {{ $item->effective_small_unit }}
                     @endif
@@ -812,13 +812,15 @@
           <div>
             <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Satuan Kemasan Baku <span class="text-rose-600">*</span></label>
             <select
+              id="add-unit-id"
               name="unit_id"
               required
+              onchange="updateAddConversionPreview()"
               class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-700 font-medium"
             >
               <option value="">-- Pilih Satuan --</option>
               @foreach ($units as $u)
-                <option value="{{ $u->id }}" {{ old('unit_id') == $u->id ? 'selected' : '' }}>
+                <option value="{{ $u->id }}" data-name="{{ $u->name }}" {{ old('unit_id') == $u->id ? 'selected' : '' }}>
                   {{ $u->name }} ({{ $u->code }})
                 </option>
               @endforeach
@@ -826,29 +828,80 @@
           </div>
 
           <!-- Satuan Eceran & Konversi Kemasan (Multi-Unit) -->
-          <div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+          <div class="sm:col-span-2 space-y-3 p-4 rounded-xl bg-slate-50 border border-slate-200/80">
+            <!-- Preset Buttons Cepat -->
             <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Satuan Eceran / Terkecil</label>
-              <input
-                type="text"
-                name="small_unit"
-                value="{{ old('small_unit', 'Pcs') }}"
-                placeholder="Misal: Pcs, Lembar, Batang..."
-                class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
-              />
-              <span class="text-[10px] text-slate-400 mt-0.5 block">Satuan pengambilan per biji oleh staf</span>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"/>
+                  </svg>
+                  Preset Multi-Satuan Populer (Klik Cepat):
+                </span>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="applyAddPreset('Rim', 'Lembar', 500)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs">
+                  📄 1 Rim = 500 Lembar (Kertas HVS)
+                </button>
+                <button type="button" onclick="applyAddPreset('Box', 'Pcs', 12)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs">
+                  📦 1 Box = 12 Pcs (Pulpen/Spidol)
+                </button>
+                <button type="button" onclick="applyAddPreset('Box', 'Pcs', 10)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs">
+                  📦 1 Box = 10 Pcs (Klip/Staples)
+                </button>
+                <button type="button" onclick="applyAddPreset('Pack', 'Lembar', 50)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs">
+                  📑 1 Pack = 50 Lembar (Map/Stopmap)
+                </button>
+                <button type="button" onclick="applyAddPreset('Pack', 'Buku', 10)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs">
+                  📚 1 Pack = 10 Buku (Buku Tulis)
+                </button>
+                <button type="button" onclick="applyAddPreset('Pcs', 'Pcs', 1)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs">
+                  🏷️ 1 Pcs = 1 Pcs (Tunggal)
+                </button>
+              </div>
             </div>
 
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Isi per Kemasan (Rasio Konversi)</label>
-              <input
-                type="number"
-                name="conversion_rate"
-                min="1"
-                value="{{ old('conversion_rate', 1) }}"
-                class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-bold"
-              />
-              <span class="text-[10px] text-slate-400 mt-0.5 block">Misal 12 jika Lusin, 10 jika Pack, 1 jika tunggal</span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Satuan Eceran / Terkecil (Small Unit) <span class="text-rose-600">*</span></label>
+                <input
+                  type="text"
+                  id="add-small-unit"
+                  name="small_unit"
+                  value="{{ old('small_unit', 'Pcs') }}"
+                  placeholder="Misal: Pcs, Lembar, Buku..."
+                  oninput="updateAddConversionPreview()"
+                  class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
+                />
+                <span class="text-[10px] text-slate-500 mt-0.5 block">Satuan pengambilan fisik oleh staf &amp; pencatatan stok fisik</span>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Isi per Kemasan (Rasio Konversi) <span class="text-rose-600">*</span></label>
+                <input
+                  type="number"
+                  id="add-conversion-rate"
+                  name="conversion_rate"
+                  min="1"
+                  value="{{ old('conversion_rate', 1) }}"
+                  oninput="updateAddConversionPreview()"
+                  class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-bold"
+                />
+                <span class="text-[10px] text-slate-500 mt-0.5 block">1 Kemasan = berapa satuan fisik eceran (misal: 12, 10, 500, atau 1)</span>
+              </div>
+            </div>
+
+            <!-- Kartu Simulasi & Penjelasan Interaktif -->
+            <div id="add-conversion-calc-card" class="p-3.5 rounded-xl bg-blue-50/80 border border-blue-200/80 text-xs transition">
+              <div class="flex items-center gap-2 font-bold text-blue-900">
+                <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span id="add-conversion-formula" class="font-mono text-sm text-blue-950 font-black">1 Kemasan = 1 Pcs</span>
+              </div>
+              <div id="add-conversion-desc" class="text-[11px] text-blue-800 mt-1 space-y-0.5 leading-relaxed">
+                <!-- Injected by JS -->
+              </div>
             </div>
           </div>
         </div>
@@ -1080,39 +1133,89 @@
               id="edit-unit-id"
               name="unit_id"
               required
+              onchange="updateEditConversionPreview()"
               class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 text-slate-700 font-medium"
             >
               <option value="">-- Pilih Satuan --</option>
               @foreach ($units as $u)
-                <option value="{{ $u->id }}">{{ $u->name }} ({{ $u->code }})</option>
+                <option value="{{ $u->id }}" data-name="{{ $u->name }}">{{ $u->name }} ({{ $u->code }})</option>
               @endforeach
             </select>
           </div>
 
           <!-- Satuan Eceran & Konversi Kemasan (Multi-Unit) -->
-          <div class="sm:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 p-3 rounded-xl bg-slate-50 border border-slate-200/80">
+          <div class="sm:col-span-2 space-y-3 p-4 rounded-xl bg-slate-50 border border-slate-200/80">
+            <!-- Preset Buttons Cepat -->
             <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Satuan Eceran / Terkecil</label>
-              <input
-                type="text"
-                id="edit-small-unit"
-                name="small_unit"
-                placeholder="Misal: Pcs, Lembar, Batang..."
-                class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
-              />
-              <span class="text-[10px] text-slate-400 mt-0.5 block">Satuan pengambilan per biji oleh staf</span>
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="text-[11px] font-bold text-slate-700 uppercase tracking-wider flex items-center gap-1.5">
+                  <svg class="w-3.5 h-3.5 text-amber-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"/>
+                  </svg>
+                  Preset Multi-Satuan Populer (Klik Cepat):
+                </span>
+              </div>
+              <div class="flex flex-wrap gap-1.5">
+                <button type="button" onclick="applyEditPreset('Rim', 'Lembar', 500)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs">
+                  📄 1 Rim = 500 Lembar (Kertas HVS)
+                </button>
+                <button type="button" onclick="applyEditPreset('Box', 'Pcs', 12)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs">
+                  📦 1 Box = 12 Pcs (Pulpen/Spidol)
+                </button>
+                <button type="button" onclick="applyEditPreset('Box', 'Pcs', 10)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs">
+                  📦 1 Box = 10 Pcs (Klip/Staples)
+                </button>
+                <button type="button" onclick="applyEditPreset('Pack', 'Lembar', 50)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs">
+                  📑 1 Pack = 50 Lembar (Map/Stopmap)
+                </button>
+                <button type="button" onclick="applyEditPreset('Pack', 'Buku', 10)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs">
+                  📚 1 Pack = 10 Buku (Buku Tulis)
+                </button>
+                <button type="button" onclick="applyEditPreset('Pcs', 'Pcs', 1)" class="px-2.5 py-1 rounded-lg bg-white hover:bg-blue-50 border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-700 text-[11px] font-semibold transition cursor-pointer shadow-2xs">
+                  🏷️ 1 Pcs = 1 Pcs (Tunggal)
+                </button>
+              </div>
             </div>
 
-            <div>
-              <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Isi per Kemasan (Rasio Konversi)</label>
-              <input
-                type="number"
-                id="edit-conversion-rate"
-                name="conversion_rate"
-                min="1"
-                class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-bold"
-              />
-              <span class="text-[10px] text-slate-400 mt-0.5 block">Misal 12 jika Lusin, 10 jika Pack, 1 jika tunggal</span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Satuan Eceran / Terkecil (Small Unit) <span class="text-rose-600">*</span></label>
+                <input
+                  type="text"
+                  id="edit-small-unit"
+                  name="small_unit"
+                  placeholder="Misal: Pcs, Lembar, Batang..."
+                  oninput="updateEditConversionPreview()"
+                  class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-medium"
+                />
+                <span class="text-[10px] text-slate-500 mt-0.5 block">Satuan pengambilan fisik oleh staf &amp; pencatatan stok fisik</span>
+              </div>
+
+              <div>
+                <label class="block text-xs font-bold text-slate-700 uppercase mb-1">Isi per Kemasan (Rasio Konversi) <span class="text-rose-600">*</span></label>
+                <input
+                  type="number"
+                  id="edit-conversion-rate"
+                  name="conversion_rate"
+                  min="1"
+                  oninput="updateEditConversionPreview()"
+                  class="w-full px-3.5 py-2.5 text-xs sm:text-sm rounded-xl border border-slate-300 bg-white font-mono focus:outline-hidden focus:ring-2 focus:ring-blue-500/20 focus:border-blue-600 font-bold"
+                />
+                <span class="text-[10px] text-slate-500 mt-0.5 block">1 Kemasan = berapa satuan fisik eceran (misal: 12, 10, 500, atau 1)</span>
+              </div>
+            </div>
+
+            <!-- Kartu Simulasi & Penjelasan Interaktif -->
+            <div id="edit-conversion-calc-card" class="p-3.5 rounded-xl bg-blue-50/80 border border-blue-200/80 text-xs transition">
+              <div class="flex items-center gap-2 font-bold text-blue-900">
+                <svg class="w-4 h-4 text-blue-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span id="edit-conversion-formula" class="font-mono text-sm text-blue-950 font-black">1 Kemasan = 1 Pcs</span>
+              </div>
+              <div id="edit-conversion-desc" class="text-[11px] text-blue-800 mt-1 space-y-0.5 leading-relaxed">
+                <!-- Injected by JS -->
+              </div>
             </div>
           </div>
         </div>
@@ -1367,7 +1470,105 @@
     document.getElementById('edit-small-unit').value = item.small_unit || '';
     document.getElementById('edit-conversion-rate').value = item.conversion_rate || 1;
 
+    updateEditConversionPreview();
     openModal('modal-edit-item');
+  }
+
+  // Multi-Unit Conversion Helper Functions
+  function updateAddConversionPreview() {
+    const unitSelect = document.getElementById('add-unit-id');
+    const opt = unitSelect?.selectedOptions[0];
+    const unitName = opt?.getAttribute('data-name') || (opt?.text ? opt.text.split(' ')[0] : 'Kemasan');
+    const smallUnitInput = document.getElementById('add-small-unit');
+    const smallUnit = smallUnitInput?.value.trim() || 'Pcs';
+    const convInput = document.getElementById('add-conversion-rate');
+    const rate = Math.max(1, parseInt(convInput?.value || '1', 10));
+
+    const formulaEl = document.getElementById('add-conversion-formula');
+    const descEl = document.getElementById('add-conversion-desc');
+
+    if (!formulaEl || !descEl) return;
+
+    if (rate > 1) {
+      formulaEl.textContent = `1 ${unitName} = ${rate} ${smallUnit}`;
+      descEl.innerHTML = `
+        <div>&bull; <strong>Pengadaan (PO):</strong> Petugas dapat memesan per <strong>${unitName}</strong> (grosir) maupun eceran per <strong>${smallUnit}</strong>.</div>
+        <div>&bull; <strong>Penyimpanan Fisik:</strong> Masuk gudang dikonversi otomatis (misal pesan 5 ${unitName} &rarr; <strong>${5 * rate} ${smallUnit}</strong> fisik masuk stok).</div>
+        <div>&bull; <strong>Distribusi / SBPB:</strong> Staf kantor dapat meminta barang per <strong>${smallUnit}</strong>.</div>
+      `;
+    } else {
+      formulaEl.textContent = `1 ${unitName} = 1 ${smallUnit} (Satuan Tunggal)`;
+      descEl.innerHTML = `
+        <div>&bull; Barang beroperasi dalam <strong>satuan tunggal (${smallUnit})</strong> tanpa kemasan bertingkat.</div>
+        <div>&bull; 1 ${unitName} langsung setara dengan 1 ${smallUnit} di dalam gudang fisik.</div>
+      `;
+    }
+  }
+
+  function applyAddPreset(unitName, smallUnit, rate) {
+    const unitSelect = document.getElementById('add-unit-id');
+    if (unitSelect) {
+      for (let opt of unitSelect.options) {
+        const optName = opt.getAttribute('data-name') || '';
+        if (optName.toLowerCase() === unitName.toLowerCase() || opt.text.toLowerCase().includes(unitName.toLowerCase())) {
+          unitSelect.value = opt.value;
+          break;
+        }
+      }
+    }
+    const smallEl = document.getElementById('add-small-unit');
+    if (smallEl) smallEl.value = smallUnit;
+    const rateEl = document.getElementById('add-conversion-rate');
+    if (rateEl) rateEl.value = rate;
+    updateAddConversionPreview();
+  }
+
+  function updateEditConversionPreview() {
+    const unitSelect = document.getElementById('edit-unit-id');
+    const opt = unitSelect?.selectedOptions[0];
+    const unitName = opt?.getAttribute('data-name') || (opt?.text ? opt.text.split(' ')[0] : 'Kemasan');
+    const smallUnitInput = document.getElementById('edit-small-unit');
+    const smallUnit = smallUnitInput?.value.trim() || 'Pcs';
+    const convInput = document.getElementById('edit-conversion-rate');
+    const rate = Math.max(1, parseInt(convInput?.value || '1', 10));
+
+    const formulaEl = document.getElementById('edit-conversion-formula');
+    const descEl = document.getElementById('edit-conversion-desc');
+
+    if (!formulaEl || !descEl) return;
+
+    if (rate > 1) {
+      formulaEl.textContent = `1 ${unitName} = ${rate} ${smallUnit}`;
+      descEl.innerHTML = `
+        <div>&bull; <strong>Pengadaan (PO):</strong> Petugas dapat memesan per <strong>${unitName}</strong> (grosir) maupun eceran per <strong>${smallUnit}</strong>.</div>
+        <div>&bull; <strong>Penyimpanan Fisik:</strong> Masuk gudang dikonversi otomatis (misal pesan 5 ${unitName} &rarr; <strong>${5 * rate} ${smallUnit}</strong> fisik masuk stok).</div>
+        <div>&bull; <strong>Distribusi / SBPB:</strong> Staf kantor dapat meminta barang per <strong>${smallUnit}</strong>.</div>
+      `;
+    } else {
+      formulaEl.textContent = `1 ${unitName} = 1 ${smallUnit} (Satuan Tunggal)`;
+      descEl.innerHTML = `
+        <div>&bull; Barang beroperasi dalam <strong>satuan tunggal (${smallUnit})</strong> tanpa kemasan bertingkat.</div>
+        <div>&bull; 1 ${unitName} langsung setara dengan 1 ${smallUnit} di dalam gudang fisik.</div>
+      `;
+    }
+  }
+
+  function applyEditPreset(unitName, smallUnit, rate) {
+    const unitSelect = document.getElementById('edit-unit-id');
+    if (unitSelect) {
+      for (let opt of unitSelect.options) {
+        const optName = opt.getAttribute('data-name') || '';
+        if (optName.toLowerCase() === unitName.toLowerCase() || opt.text.toLowerCase().includes(unitName.toLowerCase())) {
+          unitSelect.value = opt.value;
+          break;
+        }
+      }
+    }
+    const smallEl = document.getElementById('edit-small-unit');
+    if (smallEl) smallEl.value = smallUnit;
+    const rateEl = document.getElementById('edit-conversion-rate');
+    if (rateEl) rateEl.value = rate;
+    updateEditConversionPreview();
   }
 
   function openDetailModal(item) {
@@ -1375,9 +1576,17 @@
     document.getElementById('detail-name').textContent = item.name || '-';
     document.getElementById('detail-category').textContent = `Kategori: ${item.category?.name || 'Umum'}`;
     document.getElementById('detail-current-stock').textContent = item.formatted_stock || (item.current_stock ?? 0);
-    document.getElementById('detail-unit').textContent = (item.conversion_rate > 1) 
-      ? `(1 ${item.unit} = ${item.conversion_rate} ${item.small_unit || 'Pcs'})` 
-      : (item.unit || 'Pcs');
+    
+    const rate = parseInt(item.conversion_rate || 1, 10);
+    const small = item.small_unit || 'Pcs';
+    const pkg = item.unit || 'Pcs';
+    const unitEl = document.getElementById('detail-unit');
+    if (rate > 1 && pkg.toLowerCase() !== small.toLowerCase()) {
+      unitEl.innerHTML = `<span class="text-blue-700 font-bold block text-xs mt-0.5">1 ${pkg} = ${rate} ${small}</span><span class="text-[10px] text-slate-500">(Fisik tersimpan dalam ${small})</span>`;
+    } else {
+      unitEl.textContent = pkg;
+    }
+
     document.getElementById('detail-min-target').textContent = `${item.formatted_minimum_stock || item.minimum_stock} / ${item.target_stock ?? 0} ${item.unit || ''}`;
     document.getElementById('detail-location').textContent = item.storage_location || 'Gudang Utama';
     document.getElementById('detail-supplier').textContent = item.supplier?.name || '-';
@@ -1397,6 +1606,11 @@
 
     openModal('modal-detail-item');
   }
+
+  // Initialize conversion preview on DOM ready
+  document.addEventListener('DOMContentLoaded', function() {
+    updateAddConversionPreview();
+  });
 
   // Close modals on Escape key
   document.addEventListener('keydown', function(event) {

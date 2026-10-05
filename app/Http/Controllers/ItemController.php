@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\Supplier;
@@ -108,7 +109,24 @@ class ItemController extends Controller
         $validated['conversion_rate'] = max(1, (int) ($validated['conversion_rate'] ?? 1));
         $validated['current_stock'] = $validated['current_stock'] ?? 0;
 
-        Item::create($validated);
+        $createdItem = Item::create($validated);
+
+        AuditLog::record(
+            action: 'CREATE',
+            module: 'Master ATK',
+            description: "Penambahan master barang baru: {$createdItem->name} (SKU: {$createdItem->code})",
+            recordType: Item::class,
+            recordId: $createdItem->id,
+            newValues: [
+                'code' => $createdItem->code,
+                'name' => $createdItem->name,
+                'unit' => $createdItem->unit,
+                'minimum_stock' => $createdItem->minimum_stock,
+                'target_stock' => $createdItem->target_stock,
+                'current_stock' => $createdItem->current_stock,
+                'storage_location' => $createdItem->storage_location,
+            ]
+        );
 
         return redirect()->route('inventory.items.index')->with('status', 'Barang ATK berhasil ditambahkan ke inventaris.');
     }
@@ -142,7 +160,33 @@ class ItemController extends Controller
         $validated['small_unit'] = !empty($validated['small_unit']) ? $validated['small_unit'] : ($item->small_unit ?: ($unit?->name ?? 'Pcs'));
         $validated['conversion_rate'] = max(1, (int) ($validated['conversion_rate'] ?? 1));
 
+        $oldValues = [
+            'name' => $item->name,
+            'unit' => $item->unit,
+            'minimum_stock' => $item->minimum_stock,
+            'target_stock' => $item->target_stock,
+            'storage_location' => $item->storage_location,
+            'status' => $item->status,
+        ];
+
         $item->update($validated);
+
+        AuditLog::record(
+            action: 'UPDATE',
+            module: 'Master ATK',
+            description: "Pembaruan data master barang: {$item->name} (SKU: {$item->code})",
+            recordType: Item::class,
+            recordId: $item->id,
+            oldValues: $oldValues,
+            newValues: [
+                'name' => $item->name,
+                'unit' => $item->unit,
+                'minimum_stock' => $item->minimum_stock,
+                'target_stock' => $item->target_stock,
+                'storage_location' => $item->storage_location,
+                'status' => $item->status,
+            ]
+        );
 
         return redirect()->route('inventory.items.index')->with('status', 'Data barang ATK berhasil diperbarui.');
     }
@@ -152,8 +196,19 @@ class ItemController extends Controller
      */
     public function destroy(Item $item): RedirectResponse
     {
-        $newStatus = $item->status === 'active' ? 'inactive' : 'active';
+        $oldStatus = $item->status;
+        $newStatus = $oldStatus === 'active' ? 'inactive' : 'active';
         $item->update(['status' => $newStatus]);
+
+        AuditLog::record(
+            action: 'STATUS_CHANGE',
+            module: 'Master ATK',
+            description: "Perubahan status barang {$item->name} (SKU: {$item->code}) menjadi {$newStatus}",
+            recordType: Item::class,
+            recordId: $item->id,
+            oldValues: ['status' => $oldStatus],
+            newValues: ['status' => $newStatus]
+        );
 
         $message = $newStatus === 'inactive' ? 'Barang ATK telah dinonaktifkan.' : 'Barang ATK telah diaktifkan kembali.';
         return redirect()->route('inventory.items.index')->with('status', $message);

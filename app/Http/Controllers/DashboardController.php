@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Item;
+use App\Models\Procurement;
 use App\Models\Recipient;
+use App\Models\StockIn;
 use App\Models\StockOut;
 use App\Models\WorkUnit;
 use Illuminate\Http\Request;
@@ -87,6 +89,15 @@ class DashboardController extends Controller
             $sparklineQty = [0, 0, 0, 0, 1, 2, $todayQuantityOut];
         }
 
+        // 5. Data Real-time Pengadaan & Penerimaan ATK (Stock In & Procurement)
+        $todayStockInCount = StockIn::whereDate('date', today())->count();
+        $todayQuantityIn = (int) StockIn::whereDate('date', today())->sum('total_quantity');
+        $pendingProcurementCount = Procurement::where('status', 'ordered')->count();
+        $recentProcurements = Procurement::with('supplier')
+            ->orderBy('created_at', 'desc')
+            ->take(5)
+            ->get();
+
         return view('dashboard', compact(
             'activeEmployees',
             'totalItems',
@@ -105,7 +116,11 @@ class DashboardController extends Controller
             'recentStockOuts',
             'monthlyStockOutData',
             'sparklineTx',
-            'sparklineQty'
+            'sparklineQty',
+            'todayStockInCount',
+            'todayQuantityIn',
+            'pendingProcurementCount',
+            'recentProcurements'
         ));
     }
 }

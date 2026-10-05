@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Item extends Model
 {
@@ -68,6 +69,22 @@ class Item extends Model
     public function supplier(): BelongsTo
     {
         return $this->belongsTo(Supplier::class);
+    }
+
+    /**
+     * Relasi ke Rincian Pengadaan (Procurements)
+     */
+    public function procurementDetails(): HasMany
+    {
+        return $this->hasMany(ProcurementDetail::class);
+    }
+
+    /**
+     * Relasi ke Rincian Penerimaan Fisik (Stock In)
+     */
+    public function stockInDetails(): HasMany
+    {
+        return $this->hasMany(StockInDetail::class);
     }
 
     /**
@@ -141,8 +158,8 @@ class Item extends Model
             return number_format($this->current_stock, 0, ',', '.') . ' ' . $pkgUnit;
         }
 
-        $wholePkg = intdiv($this->current_stock, $rate);
-        $rem = $this->current_stock % $rate;
+        $wholePkg = intdiv((int) ($this->current_stock ?? 0), $rate);
+        $rem = (int) ($this->current_stock ?? 0) % $rate;
 
         if ($wholePkg > 0 && $rem > 0) {
             return "{$wholePkg} {$pkgUnit} {$rem} {$small}";
@@ -163,13 +180,18 @@ class Item extends Model
         $rate = max(1, (int) $this->conversion_rate);
         $pkgUnit = $this->unit ?: 'Pcs';
         $small = $this->effective_small_unit;
+        $minStock = (int) ($this->minimum_stock ?? 0);
 
-        if (!$this->has_multi_unit) {
-            return $this->minimum_stock . ' ' . $pkgUnit;
+        if ($minStock <= 0) {
+            return "0 " . $pkgUnit;
         }
 
-        $wholePkg = intdiv($this->minimum_stock, $rate);
-        $rem = $this->minimum_stock % $rate;
+        if (!$this->has_multi_unit) {
+            return $minStock . ' ' . $pkgUnit;
+        }
+
+        $wholePkg = intdiv($minStock, $rate);
+        $rem = $minStock % $rate;
 
         if ($rem === 0 && $wholePkg > 0) {
             return "{$wholePkg} {$pkgUnit}";
@@ -210,5 +232,15 @@ class Item extends Model
     public function stockLedgers(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(StockLedger::class, 'item_id');
+    }
+
+    public function stockAdjustmentDetails(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(StockAdjustmentDetail::class, 'item_id');
+    }
+
+    public function stockOpnameDetails(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(StockOpnameDetail::class, 'item_id');
     }
 }

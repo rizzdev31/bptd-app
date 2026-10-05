@@ -284,7 +284,7 @@
 
     <!-- Main Content Area -->
     <div class="flex-1 flex flex-col min-w-0 min-h-screen justify-between">
-      <div id="navbar-slot">
+      <div id="navbar-slot" class="sticky top-0 z-30 no-print">
         @include('layouts.navbar')
       </div>
 

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AuditLog;
 use App\Models\Recipient;
 use App\Models\Role;
 use App\Models\User;
@@ -109,7 +110,7 @@ class EmployeeController extends Controller
                 $userId = $user->id;
             }
 
-            Recipient::create([
+            $newRecipient = Recipient::create([
                 'nip' => $validated['nip'],
                 'name' => $validated['name'],
                 'work_unit_id' => $validated['work_unit_id'],
@@ -120,6 +121,20 @@ class EmployeeController extends Controller
                 'user_id' => $userId,
                 'description' => $validated['description'] ?? null,
             ]);
+
+            AuditLog::record(
+                action: 'CREATE',
+                module: 'Pegawai',
+                description: "Penambahan data pegawai baru: {$newRecipient->name} (NIP: {$newRecipient->nip})",
+                recordType: Recipient::class,
+                recordId: $newRecipient->id,
+                newValues: [
+                    'nip' => $newRecipient->nip,
+                    'name' => $newRecipient->name,
+                    'position' => $newRecipient->position,
+                    'status' => $newRecipient->status,
+                ]
+            );
         });
 
         return redirect()->route('pegawai.index')->with('status', 'Pegawai baru berhasil ditambahkan.');
@@ -145,6 +160,13 @@ class EmployeeController extends Controller
         ]);
 
         DB::transaction(function () use ($request, $validated, $recipient) {
+            $oldValues = [
+                'nip' => $recipient->nip,
+                'name' => $recipient->name,
+                'position' => $recipient->position,
+                'status' => $recipient->status,
+            ];
+
             $recipient->update([
                 'nip' => $validated['nip'],
                 'name' => $validated['name'],
@@ -176,6 +198,21 @@ class EmployeeController extends Controller
 
                 $recipient->user->update($userUpdates);
             }
+
+            AuditLog::record(
+                action: 'UPDATE',
+                module: 'Pegawai',
+                description: "Pembaruan data pegawai: {$recipient->name} (NIP: {$recipient->nip})",
+                recordType: Recipient::class,
+                recordId: $recipient->id,
+                oldValues: $oldValues,
+                newValues: [
+                    'nip' => $recipient->nip,
+                    'name' => $recipient->name,
+                    'position' => $recipient->position,
+                    'status' => $recipient->status,
+                ]
+            );
         });
 
         return redirect()->route('pegawai.index')->with('status', 'Data pegawai berhasil diperbarui.');
@@ -187,12 +224,23 @@ class EmployeeController extends Controller
     public function destroy(Recipient $recipient): RedirectResponse
     {
         // Toggle status aktif/nonaktif untuk menjaga integritas riwayat
-        $newStatus = $recipient->status === 'active' ? 'inactive' : 'active';
+        $oldStatus = $recipient->status;
+        $newStatus = $oldStatus === 'active' ? 'inactive' : 'active';
         $recipient->update(['status' => $newStatus]);
 
         if ($recipient->user) {
             $recipient->user->update(['status' => $newStatus]);
         }
+
+        AuditLog::record(
+            action: 'STATUS_CHANGE',
+            module: 'Pegawai',
+            description: "Perubahan status pegawai {$recipient->name} (NIP: {$recipient->nip}) menjadi {$newStatus}",
+            recordType: Recipient::class,
+            recordId: $recipient->id,
+            oldValues: ['status' => $oldStatus],
+            newValues: ['status' => $newStatus]
+        );
 
         $message = $newStatus === 'inactive' ? 'Pegawai telah dinonaktifkan.' : 'Pegawai telah diaktifkan kembali.';
         return redirect()->route('pegawai.index')->with('status', $message);

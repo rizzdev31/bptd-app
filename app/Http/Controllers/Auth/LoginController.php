@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -63,6 +64,16 @@ class LoginController extends Controller
         $request->session()->regenerate();
         $request->session()->flash('show_dashboard_preloader', true);
 
+        // Catat Audit Log Login
+        AuditLog::record(
+            action: 'LOGIN',
+            module: 'Autentikasi',
+            description: "Pengguna {$user->name} (NIP: {$user->nip}) berhasil masuk ke sistem.",
+            recordType: User::class,
+            recordId: $user->id,
+            user: $user
+        );
+
         return redirect()->intended(route('dashboard'));
     }
 
@@ -71,6 +82,20 @@ class LoginController extends Controller
      */
     public function logout(Request $request): RedirectResponse
     {
+        $user = Auth::user();
+
+        if ($user) {
+            // Catat Audit Log Logout
+            AuditLog::record(
+                action: 'LOGOUT',
+                module: 'Autentikasi',
+                description: "Pengguna {$user->name} (NIP: {$user->nip}) keluar dari sistem.",
+                recordType: User::class,
+                recordId: $user->id,
+                user: $user
+            );
+        }
+
         Auth::logout();
 
         $request->session()->invalidate();

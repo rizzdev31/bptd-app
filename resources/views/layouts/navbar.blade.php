@@ -1,5 +1,5 @@
 <!-- BEGIN: MainNavbar -->
-<header class="w-full bg-white border-b border-slate-200 sticky top-0 z-30">
+<header class="w-full bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-2xs transition-shadow">
   <div
     class="max-w-430 mx-auto px-4 sm:px-6 lg:px-8 py-3 flex flex-wrap items-center justify-between min-h-22"
   >

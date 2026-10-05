@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Inventory;
 
 use App\Http\Controllers\Controller;
+use App\Models\AuditLog;
 use App\Models\Category;
 use App\Models\Item;
 use App\Models\Recipient;
@@ -248,6 +249,22 @@ class StockOutController extends Controller
                         'description' => "Distribusi ATK: {$unitDesc} kepada {$stockOut->recipient_name}" . ($stockOut->recipient_unit ? " ({$stockOut->recipient_unit})" : ""),
                     ]);
                 }
+
+                // 5. Catat Log Audit Sesuai PRD Seksi 7, 10 & 28
+                AuditLog::record(
+                    action: 'STOCK_OUT',
+                    module: 'Permintaan ATK',
+                    description: "Pengeluaran ATK no. {$stockOut->transaction_number} kepada {$stockOut->recipient_name} ({$stockOut->recipient_unit}) total {$stockOut->total_quantity} item fisik",
+                    recordType: StockOut::class,
+                    recordId: $stockOut->id,
+                    newValues: [
+                        'transaction_number' => $stockOut->transaction_number,
+                        'recipient' => $stockOut->recipient_name,
+                        'unit' => $stockOut->recipient_unit,
+                        'total_quantity' => $stockOut->total_quantity,
+                        'items' => collect($detailsToInsert)->map(fn($d) => "{$d['item_name']} ({$d['quantity']} {$d['unit']})")->toArray(),
+                    ]
+                );
 
                 return $stockOut;
             });

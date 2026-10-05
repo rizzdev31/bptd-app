@@ -210,52 +210,64 @@
                   @endif
                 </a>
                 <a
-                  href="#"
-                  class="flex w-full items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition group"
+                  href="{{ route('inventory.stock-control.index') }}"
+                  class="flex w-full items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition group {{ request()->routeIs('inventory.stock-control.*') ? 'text-blue-700 bg-blue-50 font-bold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}"
                 >
                   <span class="flex items-center gap-2">
                     <span
-                      class="w-5 h-5 rounded-md bg-slate-100 group-hover:bg-blue-100 group-hover:text-blue-600 text-slate-500 font-mono text-[10px] flex items-center justify-center font-bold transition"
+                      class="w-5 h-5 rounded-md font-mono text-[10px] flex items-center justify-center font-bold transition {{ request()->routeIs('inventory.stock-control.*') ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-100 group-hover:bg-blue-100 group-hover:text-blue-600 text-slate-500' }}"
                       >3</span
                     >
-                    <span class="">Kendali Stock</span>
+                    <span>Kendali Stock</span>
                   </span>
+                  @if (request()->routeIs('inventory.stock-control.*'))
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                  @endif
                 </a>
                 <a
-                  href="#"
-                  class="flex w-full items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition group"
+                  href="{{ route('inventory.procurement.index') }}"
+                  class="flex w-full items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition group {{ request()->routeIs('inventory.procurement.*') ? 'text-blue-700 bg-blue-50 font-bold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}"
                 >
                   <span class="flex items-center gap-2">
                     <span
-                      class="w-5 h-5 rounded-md bg-slate-100 group-hover:bg-blue-100 group-hover:text-blue-600 text-slate-500 font-mono text-[10px] flex items-center justify-center font-bold transition"
+                      class="w-5 h-5 rounded-md font-mono text-[10px] flex items-center justify-center font-bold transition {{ request()->routeIs('inventory.procurement.*') ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-100 group-hover:bg-blue-100 group-hover:text-blue-600 text-slate-500' }}"
                       >4</span
                     >
-                    <span class="">Pengadaan</span>
+                    <span>Pengadaan</span>
                   </span>
+                  @if (request()->routeIs('inventory.procurement.*'))
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                  @endif
                 </a>
                 <a
-                  href="#"
-                  class="flex w-full items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition group"
+                  href="{{ route('inventory.reports.index') }}"
+                  class="flex w-full items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition group {{ request()->routeIs('inventory.reports.*') ? 'text-blue-700 bg-blue-50 font-bold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}"
                 >
                   <span class="flex items-center gap-2">
                     <span
-                      class="w-5 h-5 rounded-md bg-slate-100 group-hover:bg-blue-100 group-hover:text-blue-600 text-slate-500 font-mono text-[10px] flex items-center justify-center font-bold transition"
+                      class="w-5 h-5 rounded-md font-mono text-[10px] flex items-center justify-center font-bold transition {{ request()->routeIs('inventory.reports.*') ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-100 group-hover:bg-blue-100 group-hover:text-blue-600 text-slate-500' }}"
                       >5</span
                     >
-                    <span class="">Laporan</span>
+                    <span>Laporan</span>
                   </span>
+                  @if (request()->routeIs('inventory.reports.*'))
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                  @endif
                 </a>
                 <a
-                  href="#"
-                  class="flex w-full items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-blue-600 hover:bg-slate-50 transition group"
+                  href="{{ route('inventory.audit.index') }}"
+                  class="flex w-full items-center justify-between px-2.5 py-1.5 rounded-lg text-xs font-medium transition group {{ request()->routeIs('inventory.audit.*') ? 'text-blue-700 bg-blue-50 font-bold' : 'text-slate-600 hover:text-blue-600 hover:bg-slate-50' }}"
                 >
                   <span class="flex items-center gap-2">
                     <span
-                      class="w-5 h-5 rounded-md bg-slate-100 group-hover:bg-blue-100 group-hover:text-blue-600 text-slate-500 font-mono text-[10px] flex items-center justify-center font-bold transition"
+                      class="w-5 h-5 rounded-md font-mono text-[10px] flex items-center justify-center font-bold transition {{ request()->routeIs('inventory.audit.*') ? 'bg-blue-600 text-white shadow-xs' : 'bg-slate-100 group-hover:bg-blue-100 group-hover:text-blue-600 text-slate-500' }}"
                       >6</span
                     >
-                    <span class="">Audit</span>
+                    <span>Audit Trail</span>
                   </span>
+                  @if (request()->routeIs('inventory.audit.*'))
+                    <span class="w-1.5 h-1.5 rounded-full bg-blue-600"></span>
+                  @endif
                 </a>
               </div>
             </div>

@@ -3,6 +3,10 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\Inventory\AuditController;
+use App\Http\Controllers\Inventory\ProcurementController;
+use App\Http\Controllers\Inventory\ReportController;
+use App\Http\Controllers\Inventory\StockControlController;
 use App\Http\Controllers\Inventory\StockOutController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\RolePermissionController;
@@ -42,6 +46,35 @@ Route::middleware(['auth'])->group(function () {
         Route::post('/stock-out', [StockOutController::class, 'store'])->name('stock-out.store');
         Route::get('/stock-out/{stockOut}', [StockOutController::class, 'show'])->name('stock-out.show');
         Route::get('/stock-out/{stockOut}/print', [StockOutController::class, 'print'])->name('stock-out.print');
+
+        // Submenu 3: Kendali Stock & Audit (Monitoring, Adjustment, Opname, Ledger)
+        Route::get('/stock-control', [StockControlController::class, 'index'])->name('stock-control.index');
+        Route::post('/stock-control/adjustment', [StockControlController::class, 'storeAdjustment'])->name('stock-control.adjustment.store');
+        Route::get('/stock-control/adjustment/{stockAdjustment}', [StockControlController::class, 'showAdjustment'])->name('stock-control.adjustment.show');
+        Route::post('/stock-control/opname', [StockControlController::class, 'storeOpname'])->name('stock-control.opname.store');
+        Route::get('/stock-control/opname/{stockOpname}', [StockControlController::class, 'showOpname'])->name('stock-control.opname.show');
+
+        // Submenu 4: Pengadaan & Penerimaan Stok (Procurement & Stock In)
+        Route::get('/procurement', [ProcurementController::class, 'index'])->name('procurement.index');
+        Route::post('/procurement', [ProcurementController::class, 'store'])->name('procurement.store');
+        Route::get('/procurement/{procurement}', [ProcurementController::class, 'show'])->name('procurement.show');
+        Route::post('/procurement/{procurement}/receive', [ProcurementController::class, 'receive'])->name('procurement.receive');
+        Route::post('/procurement/{procurement}/cancel', [ProcurementController::class, 'cancel'])->name('procurement.cancel');
+        Route::get('/procurement/{procurement}/print', [ProcurementController::class, 'print'])->name('procurement.print');
+        Route::post('/procurement/supplier', [ProcurementController::class, 'storeSupplier'])->name('procurement.supplier.store');
+        Route::post('/procurement/direct-stock-in', [ProcurementController::class, 'storeDirectStockIn'])->name('procurement.direct-stock-in.store');
+
+        // Submenu 5: Laporan & Ekspor Persediaan (Reports & Exports)
+        Route::get('/reports', [ReportController::class, 'index'])->name('reports.index');
+        Route::get('/reports/export-excel', [ReportController::class, 'exportExcel'])->name('reports.export-excel');
+        Route::get('/reports/export-csv', [ReportController::class, 'exportCsv'])->name('reports.export-csv');
+        Route::get('/reports/print', [ReportController::class, 'print'])->name('reports.print');
+
+        // Submenu 6: Audit Trail & Jejak Aktivitas (PRD Seksi 28)
+        Route::get('/audit', [AuditController::class, 'index'])->name('audit.index');
+        Route::get('/audit/export-excel', [AuditController::class, 'exportExcel'])->name('audit.export-excel');
+        Route::get('/audit/export-csv', [AuditController::class, 'exportCsv'])->name('audit.export-csv');
+        Route::get('/audit/{auditLog}', [AuditController::class, 'show'])->name('audit.show');
     });
 
     // Pengaturan Sistem / Role & Hak Akses

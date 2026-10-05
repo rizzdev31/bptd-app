@@ -1,12 +1,16 @@
 <!-- BEGIN: Global Floating Toast Notification Container -->
 <div
   id="toast-container"
-  class="fixed top-5 right-5 z-99999 flex flex-col gap-3 pointer-events-none max-w-sm sm:max-w-md w-full px-4 sm:px-0"
+  class="fixed top-28 sm:top-24 right-3 sm:right-6 flex flex-col gap-3 pointer-events-none max-w-sm sm:max-w-md w-full px-3 sm:px-0"
+  style="z-index: 99999 !important;"
   aria-live="polite"
   aria-atomic="true"
 ></div>
 
 <style>
+  #toast-container {
+    z-index: 99999 !important;
+  }
   @keyframes toastSlideIn {
     0% {
       opacity: 0;
@@ -100,9 +104,17 @@
       let message = '';
       let duration = 4000;
 
+      const knownTypes = ['success', 'warning', 'error', 'danger', 'info'];
+
       if (typeof options === 'string') {
-        message = options;
-        type = typeArg || 'info';
+        // Mendukung kedua urutan parameter: showToast('error', 'Pesan') ATAU showToast('Pesan', 'error')
+        if (typeof typeArg === 'string' && knownTypes.includes(options.toLowerCase()) && !knownTypes.includes(typeArg.toLowerCase())) {
+          type = options.toLowerCase();
+          message = typeArg;
+        } else {
+          message = options;
+          type = (typeof typeArg === 'string' && knownTypes.includes(typeArg.toLowerCase())) ? typeArg.toLowerCase() : 'info';
+        }
       } else if (options && typeof options === 'object') {
         message = options.message || '';
         type = options.type || typeArg || 'info';
@@ -116,7 +128,7 @@
       const finalTitle = title || conf.badgeText;
 
       const toast = document.createElement('div');
-      toast.className = `toast-enter pointer-events-auto relative overflow-hidden rounded-2xl ${conf.bg} border ${conf.border} shadow-xl shadow-slate-900/5 transition-all`;
+      toast.className = `toast-enter pointer-events-auto relative overflow-hidden rounded-2xl ${conf.bg} border ${conf.border} shadow-xl shadow-slate-900/10 transition-all backdrop-blur-xs`;
 
       toast.innerHTML = `
         <div class="p-4 flex items-start gap-3.5">
@@ -126,9 +138,9 @@
           <div class="flex-1 min-w-0 pr-2">
             <div class="flex items-center gap-2">
               <span class="text-[10px] font-black tracking-wider uppercase px-2 py-0.5 rounded-full ${conf.badgeBg}">
-                ${title}
+                ${finalTitle}
               </span>
-              <span class="text-[10px] text-slate-400 font-mono">BPTD System</span>
+              <span class="text-[10px] text-slate-400 font-mono">BPTD Persediaan</span>
             </div>
             <p class="text-xs sm:text-[13px] text-slate-700 font-medium leading-relaxed mt-1.5 break-words">
               ${message}
@@ -136,7 +148,7 @@
           </div>
           <button
             type="button"
-            class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition shrink-0"
+            class="text-slate-400 hover:text-slate-600 p-1 rounded-lg hover:bg-slate-100 transition shrink-0 cursor-pointer"
             aria-label="Tutup notifikasi"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -218,6 +230,14 @@
         });
       @endif
 
+      @if (session('toast_success'))
+        window.showToast({
+          type: 'success',
+          title: 'Berhasil',
+          message: @json(session('toast_success'))
+        });
+      @endif
+
       @if (session('error'))
         window.showToast({
           type: 'error',
@@ -226,11 +246,43 @@
         });
       @endif
 
+      @if (session('toast_error'))
+        window.showToast({
+          type: 'error',
+          title: 'Kesalahan',
+          message: @json(session('toast_error'))
+        });
+      @endif
+
       @if (session('warning'))
         window.showToast({
           type: 'warning',
           title: 'Perhatian',
           message: @json(session('warning'))
+        });
+      @endif
+
+      @if (session('toast_warning'))
+        window.showToast({
+          type: 'warning',
+          title: 'Perhatian',
+          message: @json(session('toast_warning'))
+        });
+      @endif
+
+      @if (session('info'))
+        window.showToast({
+          type: 'info',
+          title: 'Informasi',
+          message: @json(session('info'))
+        });
+      @endif
+
+      @if (session('toast_info'))
+        window.showToast({
+          type: 'info',
+          title: 'Informasi',
+          message: @json(session('toast_info'))
         });
       @endif
 
